@@ -2,7 +2,22 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const MapComponent = () => {
+type Place = {
+  name: string;
+  type: string;
+};
+
+type PlaceResult = {
+  // Example structure from API
+  name: string;
+  category?: string; // Might be missing in some cases
+};
+
+type MapComponentProps = {
+  setPlaces: (places: PlaceResult[]) => void;
+};
+
+const MapComponent: React.FC<MapComponentProps> = ({ setPlaces }) => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = useState(true); // Track loading state
   const position = { lat: 37.231104160984195, lng: -80.4227827428525 };
@@ -105,6 +120,47 @@ const MapComponent = () => {
         title: "Turners Place",
       });
 
+      const fetchNearbyBuildings = (map: google.maps.Map) => {
+        const service = new window.google.maps.places.PlacesService(map);
+        const placeTypes = ["academic_department"]; // Define multiple types
+        // "transit_station"
+        // "restaurant"
+        // "school"
+        // "academic_department"
+
+        placeTypes.forEach((placeType) => {
+          const request: google.maps.places.PlaceSearchRequest = {
+            location: position,
+            radius: 110,
+            type: placeType, // Use a single type in each request
+          };
+
+          service.nearbySearch(request, (results, status) => {
+            if (
+              status === google.maps.places.PlacesServiceStatus.OK &&
+              results
+            ) {
+              setPlaces(results);
+              results.forEach((place) => {
+                console.log(place.name);
+                if (!place.geometry?.location) return; // Ensure geometry is defined
+                new google.maps.Marker({
+                  position: place.geometry.location,
+                  map,
+                  title: place.name || "Unnamed Place",
+                });
+              });
+            } else {
+              console.error(
+                `Places Service failed for type "${placeType}":`,
+                status
+              );
+            }
+          });
+        });
+      };
+
+      fetchNearbyBuildings(map);
       setIsLoading(false); // Set loading state to false after map is initialized
     };
 
