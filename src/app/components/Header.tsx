@@ -8,9 +8,7 @@ const Header = () => {
         <div className="h-20 w-20 flex items-center justify-center">
           <Image alt="VT Logo" src={logo} />
         </div>
-        <p className="text-4xl text-white font-semibold ml-10">
-          Navigation Kiosk
-        </p>
+        <p className="text-4xl text-white font-semibold ml-10">Campus Map</p>
       </div>
     </div>
   );

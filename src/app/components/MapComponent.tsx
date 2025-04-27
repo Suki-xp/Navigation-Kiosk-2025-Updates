@@ -6,9 +6,10 @@ const MapComponent: React.FC = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Campus center
-  const position = { lat: 37.227608769295145, lng: -80.42214447284769 };
   useEffect(() => {
+    // Campus center
+    const position = { lat: 37.22610350373415, lng: -80.42224010371321 };
+
     const loadGoogleMapsScript = () => {
       if (window.google?.maps) {
         initMap();
@@ -33,8 +34,8 @@ const MapComponent: React.FC = () => {
       // 1. Create the map
       const map = new window.google.maps.Map(mapRef.current, {
         center: position,
-        zoom: 17,
-        mapTypeId: "hybrid", //satellite, roadmap, hybrid
+        zoom: 16.75,
+        mapTypeId: "roadmap", //satellite, roadmap, hybrid
         mapId: "campus-map-full",
         mapTypeControl: false,
         panControl: false,
@@ -42,7 +43,7 @@ const MapComponent: React.FC = () => {
         streetViewControl: false,
         fullscreenControl: false,
         rotateControl: false,
-        tilt: 30,
+        tilt: 0,
       });
 
       // 2. Add the pulsing marker (pass position in!)

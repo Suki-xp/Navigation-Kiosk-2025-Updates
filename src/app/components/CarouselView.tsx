@@ -2,14 +2,24 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import EmptyView from "./EmptyView";
 import mapPage from "../mapPage";
-
+import SampleEvent01 from "./SampleEvent01";
+import KioskDemoView01 from "./kiosk_pics_view/KioskDemoView01";
+import KioskDemoView02 from "./kiosk_pics_view/KioskDemoView02";
+import KioskDemoView03 from "./kiosk_pics_view/KioskDemoView03";
+import KioskDemoView04 from "./kiosk_pics_view/KioskDemoView04";
 export default function CarouselView() {
-  const pages = [mapPage, EmptyView];
+  const pages = [
+    mapPage,
+    SampleEvent01,
+    KioskDemoView01,
+    KioskDemoView02,
+    KioskDemoView03,
+    KioskDemoView04,
+  ];
   const [index, setIndex] = useState(0);
   const timeoutRef = useRef<number | null>(null);
-  const timeoutDuration = useRef(10000);
+  const timeoutDuration = useRef(20000);
 
   useEffect(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -17,7 +27,18 @@ export default function CarouselView() {
     timeoutRef.current = window.setTimeout(() => {
       setIndex((prevIndex) => {
         const newIndex = (prevIndex + 1) % pages.length;
-        timeoutDuration.current = newIndex === 0 ? 50000 : 6000;
+        console.log(newIndex);
+        if (newIndex === 1) {
+          timeoutDuration.current = 7000;
+        } else if (newIndex === 2) {
+          timeoutDuration.current = 10000;
+        } else if (newIndex === 3) {
+          timeoutDuration.current = 10000;
+        } else if (newIndex === 4) {
+          timeoutDuration.current = 15000;
+        } else if (newIndex === 5) {
+          timeoutDuration.current = 20000;
+        }
         return newIndex;
       });
     }, timeoutDuration.current);
