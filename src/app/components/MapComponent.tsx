@@ -35,7 +35,7 @@ const MapComponent: React.FC = () => {
       const map = new window.google.maps.Map(mapRef.current, {
         center: position,
         zoom: 16.75,
-        mapTypeId: "hybrid", //satellite, roadmap, hybrid
+        mapTypeId: "roadmap", //satellite, roadmap, hybrid
         mapId: "campus-map-full",
         mapTypeControl: false,
         panControl: false,
