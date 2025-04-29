@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import MapLegend from "./MapLegend";
 
 const MapComponent: React.FC = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
@@ -46,7 +47,7 @@ const MapComponent: React.FC = () => {
         tilt: 0,
       });
 
-      // 2. Add the pulsing marker (pass position in!)
+      // 2. Add the pulsing marker
       addPulsingMarker(map, position);
 
       // 3. Fetch & render both closure layers
@@ -66,6 +67,7 @@ const MapComponent: React.FC = () => {
         </div>
       )}
       <div ref={mapRef} className="w-full flex-grow" />
+      <MapLegend />
     </div>
   );
 };
@@ -73,8 +75,6 @@ const MapComponent: React.FC = () => {
 export default MapComponent;
 
 // — Helper functions —
-
-// Now takes `position` as a parameter!
 function addPulsingMarker(
   map: google.maps.Map,
   position: google.maps.LatLngLiteral
@@ -128,8 +128,8 @@ function addPulsingMarker(
 }
 
 // Fetches both layer 0 (current) and layer 1 (future) and draws them:
-// • layer 0 → red on map.data
-// • layer 1 → yellow on its own Data layer
+// layer 0 - red on map.data
+// layer 1 - yellow on its own Data layer
 async function fetchClosuresAndDraw(map: google.maps.Map) {
   const base =
     "https://arcgis-central.gis.vt.edu/arcgis/rest/services/" +
@@ -156,7 +156,7 @@ async function fetchClosuresAndDraw(map: google.maps.Map) {
   map.data.addGeoJson(curJson);
   map.data.setStyle({
     fillColor: "rgba(255, 0, 0, 0.3)",
-    strokeColor: "red",
+    strokeColor: "#B91C1C",
     strokeWeight: 2,
   });
 
@@ -165,7 +165,48 @@ async function fetchClosuresAndDraw(map: google.maps.Map) {
   futureLayer.addGeoJson(futJson);
   futureLayer.setStyle({
     fillColor: "rgba(255, 255, 0, 0.3)",
-    strokeColor: "orange",
+    strokeColor: "#F59E0B",
     strokeWeight: 2,
   });
+
+  // Fetch and display ADA routes
+  await fetchADARoutes(map);
+}
+
+async function fetchADARoutes(map: google.maps.Map) {
+  const adaUrl =
+    "https://arcgis-central-prod.aws.gis.cloud.vt.edu/arcgis/rest/services/facilities/PathwaysEditorForCollector/FeatureServer/0/query?where=ada_status='ADA'&outFields=objectid,ada_status,notes&outSR=4326&f=geojson";
+
+  try {
+    const response = await fetch(adaUrl);
+    if (!response.ok) throw new Error(`ADA routes failed: ${response.status}`);
+
+    const adaJson = await response.json();
+
+    // Create a new Data layer for ADA routes
+    const adaLayer = new window.google.maps.Data({ map });
+    adaLayer.addGeoJson(adaJson);
+
+    // Style the ADA routes with dashed blue lines
+    adaLayer.setStyle({
+      strokeColor: "#1E40AF",
+      strokeWeight: 2,
+      strokeOpacity: 0.5,
+      icons: [
+        {
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 0,
+            strokeColor: "#0000FF",
+            strokeOpacity: 0.4,
+            strokeWeight: 2,
+          },
+          offset: "0%",
+          repeat: "20px",
+        },
+      ],
+    });
+  } catch (error) {
+    console.error("Error fetching ADA routes:", error);
+  }
 }
