@@ -5,7 +5,7 @@ import MapLegend from "./MapLegend";
 
 const MapComponent: React.FC = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isMapLoading, setIsMapLoading] = useState(true);
 
   useEffect(() => {
     // Campus center
@@ -50,10 +50,14 @@ const MapComponent: React.FC = () => {
       // 2. Add the pulsing marker
       addPulsingMarker(map, position);
 
-      // 3. Fetch & render both closure layers
+      // 3. Fetch & render closures first
       fetchClosuresAndDraw(map)
         .catch((err) => console.error(err))
-        .finally(() => setIsLoading(false));
+        .finally(() => {
+          setIsMapLoading(false);
+          // 4. Then load ADA routes in the background
+          fetchADARoutes(map).catch((err) => console.error(err));
+        });
     };
 
     loadGoogleMapsScript();
@@ -61,7 +65,7 @@ const MapComponent: React.FC = () => {
 
   return (
     <div className="relative flex flex-col h-full bg-gray-200">
-      {isLoading && (
+      {isMapLoading && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70">
           <p>Loading map…</p>
         </div>
@@ -168,9 +172,6 @@ async function fetchClosuresAndDraw(map: google.maps.Map) {
     strokeColor: "#F59E0B",
     strokeWeight: 2,
   });
-
-  // Fetch and display ADA routes
-  await fetchADARoutes(map);
 }
 
 async function fetchADARoutes(map: google.maps.Map) {
@@ -185,7 +186,6 @@ async function fetchADARoutes(map: google.maps.Map) {
 
     // Create a new Data layer for ADA routes
     const adaLayer = new window.google.maps.Data({ map });
-    adaLayer.addGeoJson(adaJson);
 
     // Style the ADA routes with dashed blue lines
     adaLayer.setStyle({
@@ -197,8 +197,8 @@ async function fetchADARoutes(map: google.maps.Map) {
           icon: {
             path: google.maps.SymbolPath.CIRCLE,
             scale: 0,
-            strokeColor: "#0000FF",
-            strokeOpacity: 0.4,
+            strokeColor: "#1E40AF",
+            strokeOpacity: 0.5,
             strokeWeight: 2,
           },
           offset: "0%",
@@ -206,6 +206,19 @@ async function fetchADARoutes(map: google.maps.Map) {
         },
       ],
     });
+
+    // Add features in chunks to show them as they load
+    const chunkSize = 10;
+    for (let i = 0; i < adaJson.features.length; i += chunkSize) {
+      const chunk = adaJson.features.slice(i, i + chunkSize);
+      const chunkGeoJson = {
+        type: "FeatureCollection",
+        features: chunk,
+      };
+      adaLayer.addGeoJson(chunkGeoJson);
+      // Small delay to allow UI to update
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
   } catch (error) {
     console.error("Error fetching ADA routes:", error);
   }
