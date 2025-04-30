@@ -19,7 +19,7 @@ export default function CarouselView() {
   ];
   const [index, setIndex] = useState(0);
   const timeoutRef = useRef<number | null>(null);
-  const timeoutDuration = useRef(40000);
+  const timeoutDuration = useRef(55000);
 
   useEffect(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
