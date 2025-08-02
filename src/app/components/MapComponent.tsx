@@ -16,10 +16,20 @@ const MapComponent: React.FC = () => {
         initMap();
         return;
       }
+
+      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+      if (!apiKey || apiKey === "your_new_api_key_here") {
+        console.error(
+          "Google Maps API key is not configured. Please set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in your environment variables."
+        );
+        return;
+      }
+
       const script = document.createElement("script");
       script.src =
         "https://maps.googleapis.com/maps/api/js" +
-        "?key=AIzaSyAOyO3bhO3WevkiC9suFF0-s14IJoFjgQ0" +
+        "?key=" +
+        apiKey +
         "&libraries=places,marker";
       script.async = true;
       script.defer = true;
