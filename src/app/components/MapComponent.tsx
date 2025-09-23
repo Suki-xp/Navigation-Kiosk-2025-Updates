@@ -1,77 +1,174 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
+import maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
 import MapLegend from "./MapLegend";
 
 const MapComponent: React.FC = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
+  const mapContainerRef = useRef<maplibregl.Map | null>(null);
+  //GeoJSON Data that will store the keys of the direction
+
   const [isMapLoading, setIsMapLoading] = useState(true);
+  const [startInput, setStartInput] = useState("") //Takes userinput for both
+  const [endInput, setEndInput] = useState("")
+  const [routeLayerId] = useState("route-line") //maps the distance between the points
 
   useEffect(() => {
-    // Campus center
+    //Campus center positiotn (Drillfield)
     const position = { lat: 37.22610350373415, lng: -80.42224010371321 };
 
-    const loadGoogleMapsScript = () => {
-      if (window.google?.maps) {
-        initMap();
-        return;
-      }
-
-      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-      if (!apiKey || apiKey === "your_new_api_key_here") {
-        console.error(
-          "Google Maps API key is not configured. Please set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in your environment variables."
-        );
-        return;
-      }
-
-      const script = document.createElement("script");
-      script.src =
-        "https://maps.googleapis.com/maps/api/js" +
-        "?key=" +
-        apiKey +
-        "&libraries=places,marker";
-      script.async = true;
-      script.defer = true;
-      document.head.appendChild(script);
-      script.onload = initMap;
-      script.onerror = () =>
-        console.error("Error loading Google Maps API script");
-    };
-
     const initMap = () => {
-      if (!window.google?.maps || !mapRef.current) return;
+      if (!mapRef.current) return;
 
-      // 1. Create the map
-      const map = new window.google.maps.Map(mapRef.current, {
-        center: position,
+      //Creates the map with MapTiler Cloud style
+      const apiKey = process.env.NEXT_PUBLIC_GEO_API_KEY;
+      if (!apiKey || apiKey === "") {
+        console.error(
+          "Geo maps API key is not configured. Please set NEXT_PUBLIC_GEO_API_KEY in your environment variables."
+        );
+        return null;
+      }
+
+      const map = new maplibregl.Map({
+        container: mapRef.current,
+        style: `https://maps.geoapify.com/v1/styles/osm-bright/style.json?apiKey=${apiKey}`, //Equivalent to Google 'roadmap'
+        center: [position.lng, position.lat],
         zoom: 16.75,
-        mapTypeId: "roadmap", //satellite, roadmap, hybrid
-        mapId: "campus-map-full",
-        mapTypeControl: false,
-        panControl: false,
-        zoomControl: false,
-        streetViewControl: false,
-        fullscreenControl: false,
-        rotateControl: false,
-        tilt: 0,
       });
 
-      // 2. Add the pulsing marker
-      addPulsingMarker(map, position);
+      mapContainerRef.current = map;
+      map.addControl(new maplibregl.NavigationControl({ showCompass: true }), "top-right");
+      map.dragPan.enable(); //Gives the ability to drag across
+      map.touchZoomRotate.enableRotation(); //Allows for tilt and rotation
 
-      // 3. Fetch & render closures first
-      fetchClosuresAndDraw(map)
-        .catch((err) => console.error(err))
-        .finally(() => {
-          setIsMapLoading(false);
-          // 4. Then load ADA routes in the background
-          fetchADARoutes(map).catch((err) => console.error(err));
-        });
+      //Adds the marker point of map
+      addMarker(map, position);
+
+      // Map load complete
+      map.on("load", () => {
+        setIsMapLoading(false);
+        map.dragPan.enable();
+        
+      });
     };
 
-    loadGoogleMapsScript();
+    //Load MapLibre GL JS asynchronously if needed (but since imported, init directly)
+    initMap();
+
+    //Restarts the map process
+    return () => {
+      if (mapContainerRef.current) 
+      {
+        mapContainerRef.current.remove();
+        mapContainerRef.current = null;
+      }
+    };
   }, []);
+
+  //This will use the GeoCode import to reference where the coordinate systems are 
+  //specifically the address
+  async function geocodeAddress(query: string): Promise<{ lat: number; lng: number} | null> 
+  {
+    const apikey = process.env.NEXT_PUBLIC_GEO_API_KEY;
+    //check to make sure it can still access the key
+    if (!apikey)
+    {
+      console.error("NEXT_PUBLIC_GEO_API_KEY couldn't be set")
+      return null;
+    }
+
+    const url = `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(
+      query
+    )}&apiKey=${apikey}`;
+
+    const res = await fetch(url); //gets the location before calling the json
+    const data = await res.json();
+
+    //Returns the position of where its located
+    if (data.features && data.features.length > 0)
+    {
+      const [lng, lat] = data.features[0].geometry.coordinates;
+      return {lng, lat};
+    }
+    return null;
+  }
+
+  //Tries to create the route of the locations from the GeoCode API
+  async function geocodeRoute(start: {lat: number; lng: number }, end: {lat: number; lng: number}) 
+  {
+    const apikey = process.env.NEXT_PUBLIC_GEO_API_KEY;
+    const url = `https://api.geoapify.com/v1/routing?waypoints=${start.lat},${start.lng}|${end.lat},${end.lng}&mode=drive&apiKey=${apikey}`;
+
+    const res = await fetch(url);
+    const data = await res.json();
+    
+    return data;
+  }
+
+  //Handles the route pattern of the locations 
+  async function handleRouting()
+  {
+    if (!mapContainerRef.current)
+    {
+      return;
+    }
+
+    const map = mapContainerRef.current;
+
+    const start = await geocodeAddress(startInput); 
+    const end = await geocodeAddress(endInput);
+
+    if (!start || !end)
+    {
+      alert("Locations couldn't be mapped or found, try again")
+      return;
+    }
+
+    const routeData = await geocodeRoute(start, end);
+    if (!routeData || !routeData.features || routeData.features.length == 0)
+    {
+      alert("No route found, try different locations")
+      return;
+    }
+    //Calls the functions respectively for the addresse and route tied to them
+
+    const routeFeature = routeData.features[0]; //Gets the total distance 
+    //to basically map for the user when they locate two points 
+
+    //Remove old route
+    if (map.getLayer(routeLayerId))
+    {
+      map.removeLayer(routeLayerId);
+    }
+    if (map.getSource(routeLayerId))
+    {
+      map.removeSource(routeLayerId);
+    }
+
+    //Creates route line
+    map.addSource(routeLayerId, {
+      type: "geojson",
+      data: routeFeature,
+    });
+
+    map.addLayer({
+      id: routeLayerId, 
+      type: "line",
+      source: routeLayerId, 
+      paint: {
+        "line-color": "#00008b",
+        "line-width": 6,
+      },
+    });
+
+    //rerouting
+    const totalBounds = new maplibregl.LngLatBounds();
+    routeFeature.geometry.coordinates.forEach((coord: number[]) =>
+      totalBounds.extend(coord as [number, number])
+    );
+    map.fitBounds(totalBounds, { padding: 45});
+  }
 
   return (
     <div className="relative flex flex-col h-full bg-gray-200">
@@ -80,6 +177,31 @@ const MapComponent: React.FC = () => {
           <p>Loading map…</p>
         </div>
       )}
+      <div className="absolute top-2 left-2 z-20 bg-white p-2 rounded shadow-md flex gap-2">
+        <input
+          type="text"
+          placeholder="From:"
+          value={startInput}
+          onChange={(e) => setStartInput(e.target.value)}
+          className="border p-1 rounded"
+        />
+
+        <input 
+          type="text"
+          placeholder="To:"
+          value={endInput}
+          onChange={(e) => setEndInput(e.target.value)}
+          className="border p-1 rounded"
+        />
+
+        <button 
+          onClick={handleRouting}
+          className="bg-blue-600 text black px3 py-1 rounded"
+        >
+          Route
+        </button>
+      </div>
+
       <div ref={mapRef} className="w-full flex-grow" />
       <MapLegend />
     </div>
@@ -89,147 +211,19 @@ const MapComponent: React.FC = () => {
 export default MapComponent;
 
 // — Helper functions —
-function addPulsingMarker(
-  map: google.maps.Map,
-  position: google.maps.LatLngLiteral
-) {
-  const container = document.createElement("div");
-  container.style.position = "relative";
-  container.style.width = "30px";
-  container.style.height = "30px";
+//Add a simple marker (non-pulsing; add animation later if needed)
+function addMarker(map: maplibregl.Map,
+  position: { lat: number; lng: number })
+{
+  const markerElement = document.createElement("div");
+  markerElement.style.backgroundColor = "#800020";
+  markerElement.style.width = "18px";
+  markerElement.style.height = "18px";
+  markerElement.style.borderRadius = "50%";
+  markerElement.style.border = "2px solid orange";
+  markerElement.style.cursor = "pointer";
 
-  const inner = document.createElement("div");
-  Object.assign(inner.style, {
-    position: "absolute",
-    top: "6px",
-    left: "6px",
-    width: "18px",
-    height: "18px",
-    borderRadius: "50%",
-    backgroundColor: "#800020",
-    border: "2px solid orange",
-  });
-
-  const outer = document.createElement("div");
-  Object.assign(outer.style, {
-    position: "absolute",
-    top: "0",
-    left: "0",
-    width: "30px",
-    height: "30px",
-    borderRadius: "50%",
-    background: "radial-gradient(circle, rgba(128,0,32,0.6), rgba(128,0,32,0))",
-    animation: "pulse 1.5s infinite",
-  });
-
-  const styleTag = document.createElement("style");
-  styleTag.innerHTML = `
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 0.6; }
-      50% { transform: scale(2); opacity: 0; }
-      100% { transform: scale(1); opacity: 0.6; }
-    }`;
-  document.head.appendChild(styleTag);
-
-  container.append(inner, outer);
-
-  new window.google.maps.marker.AdvancedMarkerElement({
-    position, // now defined
-    map,
-    content: container,
-    title: "Turners Place",
-  });
-}
-
-// Fetches both layer 0 (current) and layer 1 (future) and draws them:
-// layer 0 - red on map.data
-// layer 1 - yellow on its own Data layer
-async function fetchClosuresAndDraw(map: google.maps.Map) {
-  const base =
-    "https://arcgis-central.gis.vt.edu/arcgis/rest/services/" +
-    "facilities/Construction_Closures/FeatureServer";
-
-  const makeUrl = (layerNum: number) =>
-    `${base}/${layerNum}/query` +
-    `?where=1=1` +
-    `&outFields=*` +
-    `&returnGeometry=true` +
-    `&outSR=4326` +
-    `&f=geojson`;
-
-  const [curRes, futRes] = await Promise.all([
-    fetch(makeUrl(0)),
-    fetch(makeUrl(1)),
-  ]);
-  if (!curRes.ok) throw new Error(`current closures failed: ${curRes.status}`);
-  if (!futRes.ok) throw new Error(`future closures failed: ${futRes.status}`);
-
-  const [curJson, futJson] = await Promise.all([curRes.json(), futRes.json()]);
-
-  // current closures in red
-  map.data.addGeoJson(curJson);
-  map.data.setStyle({
-    fillColor: "rgba(255, 0, 0, 0.3)",
-    strokeColor: "#B91C1C",
-    strokeWeight: 2,
-  });
-
-  // future closures in orange on a separate Data layer
-  const futureLayer = new window.google.maps.Data({ map });
-  futureLayer.addGeoJson(futJson);
-  futureLayer.setStyle({
-    fillColor: "rgba(255, 255, 0, 0.3)",
-    strokeColor: "#F59E0B",
-    strokeWeight: 2,
-  });
-}
-
-async function fetchADARoutes(map: google.maps.Map) {
-  const adaUrl =
-    "https://arcgis-central-prod.aws.gis.cloud.vt.edu/arcgis/rest/services/facilities/PathwaysEditorForCollector/FeatureServer/0/query?where=ada_status='ADA'&outFields=objectid,ada_status,notes&outSR=4326&f=geojson";
-
-  try {
-    const response = await fetch(adaUrl);
-    if (!response.ok) throw new Error(`ADA routes failed: ${response.status}`);
-
-    const adaJson = await response.json();
-
-    // Create a new Data layer for ADA routes
-    const adaLayer = new window.google.maps.Data({ map });
-
-    // Style the ADA routes with dashed blue lines
-    adaLayer.setStyle({
-      strokeColor: "#1E40AF",
-      strokeWeight: 2,
-      strokeOpacity: 0.5,
-      icons: [
-        {
-          icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            scale: 0,
-            strokeColor: "#1E40AF",
-            strokeOpacity: 0.5,
-            strokeWeight: 2,
-          },
-          offset: "0%",
-          repeat: "20px",
-        },
-      ],
-    });
-
-    // Add features in chunks to show them as they load
-    const chunkSize = 10;
-    for (let i = 0; i < adaJson.features.length; i += chunkSize) {
-      const chunk = adaJson.features.slice(i, i + chunkSize);
-      const chunkGeoJson = {
-        type: "FeatureCollection",
-        features: chunk,
-      };
-      adaLayer.addGeoJson(chunkGeoJson);
-      // Small delay to allow UI to update
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    }
-  } catch (error) {
-    console.error("Error fetching ADA routes:", error);
-  }
+  new maplibregl.Marker({ element: markerElement })
+    .setLngLat([position.lng, position.lat])
+    .addTo(map);
 }
