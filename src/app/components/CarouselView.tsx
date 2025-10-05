@@ -19,7 +19,7 @@ export default function CarouselView() {
   ];
   const [index, setIndex] = useState(0);
   const timeoutRef = useRef<number | null>(null);
-  const timeoutDuration = useRef(55000);
+  const timeoutDuration = useRef(100000);
 
   useEffect(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -29,15 +29,15 @@ export default function CarouselView() {
         const newIndex = (prevIndex + 1) % pages.length;
         console.log(newIndex);
         if (newIndex === 1) {
-          timeoutDuration.current = 7000;
+          timeoutDuration.current = 10000;
         } else if (newIndex === 2) {
           timeoutDuration.current = 10000;
         } else if (newIndex === 3) {
           timeoutDuration.current = 10000;
         } else if (newIndex === 4) {
-          timeoutDuration.current = 15000;
+          timeoutDuration.current = 10000;
         } else if (newIndex === 5) {
-          timeoutDuration.current = 20000;
+          timeoutDuration.current = 10000;
         }
         return newIndex;
       });
