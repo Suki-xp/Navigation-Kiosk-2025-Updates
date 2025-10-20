@@ -1,0 +1,134 @@
+[
+    {
+        "id": 17472,
+        "name": "Mitchell Hall",
+        "type": "Current",
+        "details": {
+            "Closure Start Date": "2024-05-20 06:00:00",
+            "Closure End Date": "2028-05-22 06:00:00",
+            "COMMENTS": "Area closed for the demolition of Randolph Hall, and the construction of Mitchell Hall",
+            "More Information": "https://www.facilities.vt.edu/planning-financing/campus-construction-projects/replacerandolphhall.html"
+        }
+    },
+    {
+        "id": 17948,
+        "name": "Burruss Hall entrance renovation",
+        "type": "Current",
+        "details": {
+            "Closure Start Date": "2024-05-13 06:00:00",
+            "Closure End Date": "2025-12-31 17:00:00",
+            "COMMENTS": "The sidewalk will be closed for a construction laydown area for the duration of the Burruss renovation project.",
+            "More Information": null
+        }
+    },
+    {
+        "id": 20170,
+        "name": "Perry St. sidewalk near Surge Building",
+        "type": "Current",
+        "details": {
+            "Closure Start Date": "2025-08-21 08:00:00",
+            "Closure End Date": "2025-10-31 16:30:00",
+            "COMMENTS": "Sidewalkd closed to park 44' Trailer, with temporary A/C unit, on sidewalk on the Surge Building side of Perry Steet until Replacement unit is installed.",
+            "More Information": null
+        }
+    },
+    {
+        "id": 20162,
+        "name": "Fralin facade repair",
+        "type": "Current",
+        "details": {
+            "Closure Start Date": "2025-08-04 06:00:00",
+            "Closure End Date": "2026-02-28 06:00:00",
+            "COMMENTS": "External repairs are being completed around the top of Fralin Hall, in order to weatherproof the envelope of the building. Boom lift will be used around the building during this time to reach the top of the building.",
+            "More Information": null
+        }
+    },
+    {
+        "id": 20171,
+        "name": "Boiler 10 Demo Work - Roll-Off Box",
+        "type": "Current",
+        "details": {
+            "Closure Start Date": "2025-09-02 06:00:00",
+            "Closure End Date": "2025-10-31 19:00:00",
+            "COMMENTS": "A roll off box needs to be placed along side the building of the Power Plant on Old Turner Street for scrap metal from No. 8 Boiler. The box will not be blocking the sidewalk. ",
+            "More Information": null
+        }
+    },
+    {
+        "id": 18405,
+        "name": "Torgersen Hall Building Envelope Improvement",
+        "type": "Current",
+        "details": {
+            "Closure Start Date": "2024-11-20 06:00:00",
+            "Closure End Date": "2026-12-31 18:00:00",
+            "COMMENTS": "Torgersen Hall Building Envelope Improvement Project- Tuckpointing , adding structural wall ties, replacing clerestory windows, Hokie Stone repairs",
+            "More Information": null
+        }
+    },
+    {
+        "id": 20176,
+        "name": "Old Turner Street Steam Joint Replacement",
+        "type": "Current",
+        "details": {
+            "Closure Start Date": "2025-09-22 08:00:00",
+            "Closure End Date": "2025-10-24 08:00:00",
+            "COMMENTS": "Demo a section of Old Turner St to access the steam tunnel for replacement of High pressure expansion joint ( Closed portion of old turner )",
+            "More Information": null
+        }
+    },
+    {
+        "id": 20175,
+        "name": "New Business Building",
+        "type": "Current",
+        "details": {
+            "Closure Start Date": "2025-10-17 06:00:00",
+            "Closure End Date": "2027-10-17 06:00:00",
+            "COMMENTS": "Area closed for construction of the New Business Building. See attached logistics and mobility plan.",
+            "More Information": null
+        }
+    },
+    {
+        "id": 20164,
+        "name": "ADA Priority 3",
+        "type": "Current",
+        "details": {
+            "Closure Start Date": "2025-08-19 17:00:00",
+            "Closure End Date": "2025-11-03 17:00:00",
+            "COMMENTS": "The ADA accessible paths are open. Two construction zones will remain until project completion.",
+            "More Information": null
+        }
+    },
+    {
+        "id": 20169,
+        "name": "ADA Priority 2: Sidewalk east of Pamplin Hall",
+        "type": "Current",
+        "details": {
+            "Closure Start Date": "2025-07-15 08:00:00",
+            "Closure End Date": "2025-10-28 17:00:00",
+            "COMMENTS": "All ADA Priority 2 project pathways are open. An isolated construction zone at the eastern entrance of Pamplin Hall will remain due to ongoing waterproofing activities.",
+            "More Information": null
+        }
+    },
+    {
+        "id": 20183,
+        "name": "Generator Rotor Load",
+        "type": "Scheduled",
+        "details": {
+            "Closure Start Date": "2025-10-23 07:00:00",
+            "Closure End Date": "2025-10-23 13:00:00",
+            "COMMENTS": "A pedestrian detour will be in place around CLMS building indicated by yellow highlight on attached picture on Thursday October 23, 2025 from 7am to 1pm. This is to load a generator rotor onto a flatbed truck using a crane. ",
+            "More Information": null
+        }
+    },
+    {
+        "id": 20184,
+        "name": "Maroon Bus Loop Closure",
+        "type": "Scheduled",
+        "details": {
+            "Closure Start Date": "2025-11-22 06:00:00",
+            "Closure End Date": "2025-11-30 18:00:00",
+            "COMMENTS": "The east bus loop will be closed to install a pantograph mast arm.",
+            "More Information": null
+        }
+    }
+]
