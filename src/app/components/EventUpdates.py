@@ -1,9 +1,6 @@
 #Class is responibile for translated the closure data for the campus 
 #and display on the campus map
 
-#Will use the selenium import because needs to be able to update the data 
-#of the website in real time to show proper closures
-
 import requests
 import json
 import datetime

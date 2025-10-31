@@ -2,15 +2,15 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import mapPage from "../mapPage";
+import MapPage from "../mapPage";
 import SampleEvent01 from "./SampleEvent01";
-import KioskDemoView01 from "./kiosk_pics_view/KioskDemoView01";
-import KioskDemoView02 from "./kiosk_pics_view/KioskDemoView02";
-import KioskDemoView03 from "./kiosk_pics_view/KioskDemoView03";
-import KioskDemoView04 from "./kiosk_pics_view/KioskDemoView04";
+import KioskDemoView01 from "./KioskDemoView01";
+import KioskDemoView02 from "./KioskDemoView02";
+import KioskDemoView03 from "./KioskDemoView03";
+import KioskDemoView04 from "./KioskDemoView04";
 export default function CarouselView() {
   const pages = [
-    mapPage,
+    MapPage,
     SampleEvent01,
     KioskDemoView01,
     KioskDemoView02,

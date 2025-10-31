@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import kiosk04 from "../../../assets/kiosk04.png";
+import kiosk04 from "./assets/kiosk04.png";
 
 export default function KioskDemoView04() {
   console.log("KioskDemoView03");
