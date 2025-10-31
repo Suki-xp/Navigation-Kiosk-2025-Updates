@@ -193,11 +193,58 @@ const MapComponent: React.FC = () => {
     });
 
     //rerouting
-    const totalBounds = new maplibregl.LngLatBounds();
-    routeFeature.geometry.coordinates.forEach((coord: number[]) =>
-      totalBounds.extend(coord as [number, number])
+    const coords = routeFeature.geometry.coordinates;
+    const bounds = new maplibregl.LngLatBounds();
+
+    coords.forEach((coord: number[]) => {
+      bounds.extend(coord as [number, number]);
+    });
+
+    //Now we are going to calcualte the distance in meters for the user to see
+    //by calling a helper java script method (taken from the interent)
+    function formatingDistance
+    (
+      lat1: number, lon1: number,
+      lat2: number, lon2: number
+    ): number {
+
+    const R = 6371000; // Earth radius in meters
+    const toRad = (x: number) => x * Math.PI / 180;
+
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return R * c;
+}
+
+    const startPoint = coords[0];
+    const endPoint = coords[coords.length - 1];
+    const distance = formatingDistance(startPoint[1], startPoint[0],
+      endPoint[1], endPoint[0]
     );
-    map.fitBounds(totalBounds, { padding: 45});
+
+    //Then we adjust the map only if the distance can pass some mark
+    if (distance > 1000)
+    {
+        map.fitBounds(bounds, { padding: 60, maxZoom: 20})
+    }
+    else 
+    {
+        //Centering at the midpoint but keeping the zoom for route
+        const midLeft = (startPoint[1] + endPoint[1]) / 2;
+        const midRight = (startPoint[0] + endPoint[0] / 2);
+        //The ease to command to tie
+        map.easeTo({
+          center: [midRight, midLeft],
+          zoom: map.getZoom(), 
+          duration: 1000,
+        })
+    }
   }
 
   async function autofillInputs(query: string): Promise<GeoapifyFeature[]>
