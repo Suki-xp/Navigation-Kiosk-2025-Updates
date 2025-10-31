@@ -4,7 +4,6 @@ import Image from "next/image";
 import MapComponent from "./components/MapComponent";
 
 import logoVT from "./components/assets/vt-logo.png"
-import logoMap from './components/assets/marker icon.webp';
 import logoCal from './components/assets/calendar icon.webp';
 import logoAlert from './components/assets/alert icon.webp';
 import logoGear from './components/assets/gear.png';
@@ -36,9 +35,8 @@ export default function MapPage() {
       {/* Button clicking */}
       <button
         onClick={() => setIsMenuOpen(true)}
-        className="fixed top-4 right-4 z-50 bg-[#6B1F3D] text-white p-3 rounded-full shadow-lg hover:bg-[#5a1a33] transition"
-      >
-        <Image src={logoPlus} alt="Add" width={24} height={24} />
+        className="fixed top-2 right-1 z-60 bg-[#6B1F3D] text-white p-3 rounded-full shadow-lg hover:bg-[#5a1a33] transition">
+        <Image src={logoPlus} alt="Add" width={26} height={26} />
       </button>
 
       {/*Siderbar that opens from the */}
@@ -67,10 +65,6 @@ export default function MapPage() {
 
             {/* Menu Items */}
             <nav className="flex-1 p-4 space-y-1">
-              <button className="w-full flex items-center gap-3 p-3 rounded-lg bg-white/10 hover:bg-white/20 transition">
-                <Image src={logoMap} width={20} height={20} alt="" />
-                <span>Map</span>
-              </button>
               <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-white/20 transition">
                 <Image src={logoCal} width={20} height={20} alt="" />
                 <span>Events</span>
