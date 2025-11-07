@@ -68,10 +68,10 @@ def scrapperEvents():
     print("Events were added to json")
         
 #Have it update every 15 minutes with new events to display
-#schedule.every(15).minutes.do(scrapperEvents)
+schedule.every(15).minutes.do(scrapperEvents)
 
 if __name__ == "__main__":
     scrapperEvents()
-    #while True:
-        #schedule.run_pending()
-        #time.sleep(1)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
