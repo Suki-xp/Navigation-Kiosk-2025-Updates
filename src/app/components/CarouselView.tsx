@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import MapPage from "../mapPage";
-import SampleEvent01 from "./SampleEvent01";
 import KioskDemoView01 from "./KioskDemoView01";
 import KioskDemoView02 from "./KioskDemoView02";
 import KioskDemoView03 from "./KioskDemoView03";
@@ -11,7 +10,6 @@ import KioskDemoView04 from "./KioskDemoView04";
 export default function CarouselView() {
   const pages = [
     MapPage,
-    SampleEvent01,
     KioskDemoView01,
     KioskDemoView02,
     KioskDemoView03,
@@ -29,15 +27,15 @@ export default function CarouselView() {
         const newIndex = (prevIndex + 1) % pages.length;
         console.log(newIndex);
         if (newIndex === 1) {
-          timeoutDuration.current = 10000;
+          timeoutDuration.current = 20000;
         } else if (newIndex === 2) {
-          timeoutDuration.current = 10000;
+          timeoutDuration.current = 20000;
         } else if (newIndex === 3) {
-          timeoutDuration.current = 10000;
+          timeoutDuration.current = 20000;
         } else if (newIndex === 4) {
-          timeoutDuration.current = 10000;
+          timeoutDuration.current = 20000;
         } else if (newIndex === 5) {
-          timeoutDuration.current = 10000;
+          timeoutDuration.current = 20000;
         }
         return newIndex;
       });
