@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from "react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import MapComponent from "./components/MapComponent";
 import realTimeUpdates from "./realTimeData/events.json"
 import closureUpdates from "./realTimeData/closures.json"
@@ -26,14 +26,21 @@ import logoPlus from './components/assets/plus.webp';
 
 //Now we are going to import the different images specifically for the type of 
 //events, allowing users to gauge the idea of what type of vibe it represents
-const allEvents = { [key: string]: string } = 
+import logoAcademic from "./components/assets/academicEvents.jpg";
+import logoSports from "./components/assets/sportsEvents.png";
+import logoCareer from "./components/assets/careerEvents.jpg";
+import logoSocial from "./components/assets/socialEvents.jpg";
+import logoArts from "./components/assets/artsEvents.jpg";
+import logoGeneral from "./components/assets/generalEvents.jpeg";
+
+const allEvents: { [key: string]: StaticImageData | string } = 
 {
-  "Academics": './components/assets/academicEvents.jpg',
-  "Sports": './components/assets/sportsEvents.png',
-  "Career": './components/assets/careerEvents.jpg',
-  'Social': './components/assets/socialEvents.jpg', 
-  'Arts': './components/assets/artsEvents.jpg', 
-  'General': './components/assets/generalEvents.jpeg',
+  "Academics": logoAcademic,
+  "Sports": logoSports,
+  "Career": logoCareer,
+  'Social': logoSocial, 
+  'Arts': logoArts, 
+  'General': logoGeneral,
 };
 
 //Since we are going to be importing the closure data from the json file
@@ -417,7 +424,7 @@ export default function MapPage() {
           </div>
         )}
 
-        {/* --- MODIFIED: This entire 'events' block is new --- */}
+        {/*Events block*/}
         {activeTab === "events" && (
           <div className="p-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-2">CAMPUS EVENTS</h2>
@@ -442,11 +449,19 @@ export default function MapPage() {
                 const { date, time } = formatEventDate(event.Date);
                 const tag = getEvents(event);
 
+                //Getting the tag for the rest of the images to update on the dispalay
+                const totalImages = allEvents[tag] || allEvents["General"]
                 return (
                   <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
                     {/* Image Placeholder */}
-                    <div className="h-40 bg-gray-200 flex items-center justify-center text-gray-500 relative">
-                      <span className="text-sm"><Image src={generalImages} alt="Menu" width={200} height={400} /></span>
+                    <div className="h-40 bg-gray-200 relative">
+                      <Image 
+                          src = {totalImages}
+                          alt = {event.Title}
+                          fill //So it fits the container
+                          className = "object-cover transititon-transform hover:scale-105"
+                          sizes = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
                       {/* Tag */}
                       <span className="absolute top-3 left-3 bg-white/90 text-gray-800 text-xs font-semibold px-2 py-1 rounded">
                         {tag}
