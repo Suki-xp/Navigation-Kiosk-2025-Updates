@@ -27,15 +27,15 @@ export default function CarouselView() {
         const newIndex = (prevIndex + 1) % pages.length;
         console.log(newIndex);
         if (newIndex === 1) {
-          timeoutDuration.current = 20000;
+          timeoutDuration.current = 50000;
         } else if (newIndex === 2) {
-          timeoutDuration.current = 20000;
+          timeoutDuration.current = 50000;
         } else if (newIndex === 3) {
-          timeoutDuration.current = 20000;
+          timeoutDuration.current = 50000;
         } else if (newIndex === 4) {
-          timeoutDuration.current = 20000;
+          timeoutDuration.current = 50000;
         } else if (newIndex === 5) {
-          timeoutDuration.current = 20000;
+          timeoutDuration.current = 50000;
         }
         return newIndex;
       });
@@ -56,7 +56,7 @@ export default function CarouselView() {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -50 }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
+          transition={{ duration: 0.7, ease: "easeInOut" }}
           className="absolute w-full h-full"
         >
           <Page />

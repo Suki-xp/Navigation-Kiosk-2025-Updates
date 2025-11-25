@@ -24,6 +24,18 @@ import logoAlert from './components/assets/alert icon.webp';
 import logoGear from './components/assets/gear.png';
 import logoPlus from './components/assets/plus.webp';
 
+//Now we are going to import the different images specifically for the type of 
+//events, allowing users to gauge the idea of what type of vibe it represents
+const allEvents = { [key: string]: string } = 
+{
+  "Academics": './components/assets/academicEvents.jpg',
+  "Sports": './components/assets/sportsEvents.png',
+  "Career": './components/assets/careerEvents.jpg',
+  'Social': './components/assets/socialEvents.jpg', 
+  'Arts': './components/assets/artsEvents.jpg', 
+  'General': './components/assets/generalEvents.jpeg',
+};
+
 //Since we are going to be importing the closure data from the json file
 //we need to make consts that can match the format
   const warningIcons =
@@ -434,7 +446,7 @@ export default function MapPage() {
                   <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
                     {/* Image Placeholder */}
                     <div className="h-40 bg-gray-200 flex items-center justify-center text-gray-500 relative">
-                      <span className="text-sm">Event Image Placeholder</span>
+                      <span className="text-sm"><Image src={generalImages} alt="Menu" width={200} height={400} /></span>
                       {/* Tag */}
                       <span className="absolute top-3 left-3 bg-white/90 text-gray-800 text-xs font-semibold px-2 py-1 rounded">
                         {tag}
