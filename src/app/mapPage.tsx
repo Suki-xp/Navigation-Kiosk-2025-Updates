@@ -220,18 +220,17 @@ export default function MapPage() {
   useEffect(() => {
     const gettingData = async () => {
       try {
-        const timeStamp = new Date().getTime();
 
         //Getting the closures json data from the location in file
-        const fetchClosure = await fetch(`/Navigation-Kiosk/appUpdates/appData/closures.json?t=${timeStamp}`);
+        const fetchClosure = await fetch('/realTimeData/closures.json?t=${timeStamp}');
         const closureData = await fetchClosure.json();
-        setRawUpdates(closureData as Closures[]); // ⬅️ Sets closure data
+        setRawUpdates(closureData as Closures[]); //Setting closure data
 
         //Same thing for the Events
-        const fetchEvents = await fetch(`/Navigation-Kiosk/appUpdates/appData/events.json?t=${timeStamp}`);
+        const fetchEvents = await fetch('/realTimeData/events.json?t=${timeStamp}');
         const eventData = await fetchEvents.json();
-        setRawEvents(eventData as Event[]); // ⬅️ Sets event data
-        
+        setRawEvents(eventData as Event[]); //Setting event data
+
         //Display that the data was updated properly
         console.log("Information was updated regarding campus closures and events at: ", new Date().toLocaleTimeString());
       }
@@ -268,7 +267,6 @@ export default function MapPage() {
   //Same approach but now we filter it for the seperation of the events into title, date, time, and location
   const filteredEvents = rawEvents
     .filter((d) => {
-      // *** MODIFIED: Logic is correct, but relies on our updated `eventFilter` state ***
       if (eventFilter === "all")
         return true;
       return getEvents(d) === eventFilter;
@@ -405,7 +403,7 @@ export default function MapPage() {
               )}
               {filteredClosures.length > 0 && (
                 <>
-                  {(filteredClosures as Closures[]).map((c) => { // Cast is necessary here since map is inferred from rawUpdates
+                  {(filteredClosures as Closures[]).map((c) => {//Cast is necessary here since map is inferred from rawUpdates
                     const urgency = getUrgency(c.name, c.details.COMMENTS);
                     const category = getTypeOfAlert(c.details.COMMENTS);
                     const timeAgo = gettingTime(c.details["Closure Start Date"]);
