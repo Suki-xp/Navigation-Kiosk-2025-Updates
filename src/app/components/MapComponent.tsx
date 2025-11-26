@@ -237,7 +237,7 @@ const MapComponent: React.FC = () => {
     {
         //Centering at the midpoint but keeping the zoom for route
         const midLeft = (startPoint[1] + endPoint[1]) / 2;
-        const midRight = (startPoint[0] + endPoint[0] / 2);
+        const midRight = (startPoint[0] + endPoint[0]) / 2;
         //The ease to command to tie
         map.easeTo({
           center: [midRight, midLeft],
