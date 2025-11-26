@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import MapPage from "../mapPage";
 import KioskDemoView01 from "./KioskDemoView01";
@@ -16,38 +16,29 @@ export default function CarouselView() {
     KioskDemoView04,
   ];
   const [index, setIndex] = useState(0);
-  const timeoutRef = useRef<number | null>(null);
-  const timeoutDuration = useRef(100000);
 
   useEffect(() => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    let duration = 50000;
+    
+    //Going through the specific dispalys of the Kiosk
+    if (index === 0)
+    {
+      duration = 100000; //Map gets the most priority view for 100 seconds
+      //while the rest get the 50 seconds
+    }
+    else
+    {
+      duration = 50000;
+    }
 
-    timeoutRef.current = window.setTimeout(() => {
-      setIndex((prevIndex) => {
-        const newIndex = (prevIndex + 1) % pages.length;
-        console.log(newIndex);
-        if (newIndex === 1) {
-          timeoutDuration.current = 50000;
-        } else if (newIndex === 2) {
-          timeoutDuration.current = 50000;
-        } else if (newIndex === 3) {
-          timeoutDuration.current = 50000;
-        } else if (newIndex === 4) {
-          timeoutDuration.current = 50000;
-        } else if (newIndex === 5) {
-          timeoutDuration.current = 50000;
-        }
-        return newIndex;
-      });
-    }, timeoutDuration.current);
-
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
+    const totalTimer = setTimeout(() => {
+      setIndex((prevIndex) => (prevIndex + 1) % pages.length);
+    }, duration)
+    
+    return () => clearTimeout(totalTimer);
   }, [index, pages.length]);
 
   const Page = pages[index];
-
   return (
     <div className="relative w-full h-full">
       <AnimatePresence mode="wait">

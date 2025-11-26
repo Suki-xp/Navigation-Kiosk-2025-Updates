@@ -74,7 +74,7 @@ def running():
         scrape_layer(layer)
 
     #Saves the data into the JSON which can then be queued into our map implementation later
-    with open("closures.json", "w", encoding="utf-8") as f:
+    with open("../../../appUpdates/appData/closures.json", "w", encoding="utf-8") as f:
         json.dump(closures, f, ensure_ascii=False, indent=4)
         
     print(f"Formatted to both JSON file")

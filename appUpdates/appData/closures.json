@@ -33,6 +33,17 @@
         }
     },
     {
+        "id": 20184,
+        "name": "Maroon Bus Loop Closure",
+        "type": "Current",
+        "details": {
+            "Closure Start Date": "2025-11-22 06:00:00",
+            "Closure End Date": "2025-11-30 18:00:00",
+            "COMMENTS": "The east bus loop will be closed to install a pantograph mast arm.",
+            "More Information": null
+        }
+    },
+    {
         "id": 18405,
         "name": "Torgersen Hall Building Envelope Improvement",
         "type": "Current",
@@ -77,25 +88,69 @@
         }
     },
     {
-        "id": 20184,
-        "name": "Maroon Bus Loop Closure",
-        "type": "Scheduled",
+        "id": 20192,
+        "name": "Paths east of Patton Hall",
+        "type": "Current",
         "details": {
-            "Closure Start Date": "2025-11-22 06:00:00",
-            "Closure End Date": "2025-11-30 18:00:00",
-            "COMMENTS": "The east bus loop will be closed to install a pantograph mast arm.",
+            "Closure Start Date": "2025-11-24 07:00:00",
+            "Closure End Date": "2025-11-28 17:00:00",
+            "COMMENTS": "The ADA accessible paths east of Patton Hall will be closed. Pedestrians who use the new ADA paths to traverse the hill between Holden Hall and Drillfield Drive may choose to use the interior elevator of Patton Hall to gain access to Drillfield Drive.",
             "More Information": null
         }
     },
     {
-        "id": 20191,
-        "name": "VT Open House Events Parking Lot Closure",
+        "id": 20193,
+        "name": "Sidewalk behind Lane Hall",
+        "type": "Current",
+        "details": {
+            "Closure Start Date": "2025-11-24 07:00:00",
+            "Closure End Date": "2025-11-26 17:00:00",
+            "COMMENTS": "Posts and chain will be installed on the sidewalk behind Lane Hall. Occupants may experience typical construction-related noise and dust associated with the work. Access to the sidewalk will also be limited.",
+            "More Information": null
+        }
+    },
+    {
+        "id": 20198,
+        "name": "Academic Building 1 Parking Gate Conduit",
         "type": "Scheduled",
         "details": {
-            "Closure Start Date": "2025-11-14 17:00:00",
-            "Closure End Date": "2025-11-16 13:00:00",
-            "COMMENTS": "In support of Virginia Tech’s Open House events, both the Upper Stanger Street Parking Lot and the Architecture Annex Parking Lot will be closed. ADA patrons will still be able to enter and park in these two lots during the closure period.",
-            "More Information": "https://news.vt.edu/notices/adm-evergreens/parking-lot-closures-open-house.html"
+            "Closure Start Date": "2025-12-02 06:00:00",
+            "Closure End Date": "2025-12-05 18:00:00",
+            "COMMENTS": "The lot will be closed to install the parking gate conduit.",
+            "More Information": null
+        }
+    },
+    {
+        "id": 20194,
+        "name": "Inn facade repairs",
+        "type": "Scheduled",
+        "details": {
+            "Closure Start Date": "2025-12-01 09:00:00",
+            "Closure End Date": "2026-10-01 15:00:00",
+            "COMMENTS": "Courtyard area will be closed. Courtyard exterior exit doors may be re-routed during the construction process. Occupants may experience typical construction-related noise and dust associated with the work. Work will occur 9:00 a.m. to 3:00 M-F.",
+            "More Information": null
+        }
+    },
+    {
+        "id": 20196,
+        "name": "Academic Building 1 Parking Gate Conduit",
+        "type": "Scheduled",
+        "details": {
+            "Closure Start Date": "2025-12-08 06:00:00",
+            "Closure End Date": "2025-12-12 18:00:00",
+            "COMMENTS": "The lots will be closed to install the parking gate conduit.",
+            "More Information": null
+        }
+    },
+    {
+        "id": 20195,
+        "name": "Fleet Services ADA Parking and Pathway",
+        "type": "Scheduled",
+        "details": {
+            "Closure Start Date": "2025-12-01 06:00:00",
+            "Closure End Date": "2025-12-17 18:00:00",
+            "COMMENTS": "There will be contractors grading, milling and paving a new ADA parking spot and ADA path.  This will temporarily affect the normal driving path to the fuel center.",
+            "More Information": null
         }
     }
 ]

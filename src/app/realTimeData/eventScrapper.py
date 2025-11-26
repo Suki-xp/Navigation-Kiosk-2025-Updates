@@ -61,7 +61,7 @@ def scrapperEvents():
                      "Location": event_location})
     
     #Then we write our saved data to a json which can later be translated to the react
-    with open("events.json", mode="w", encoding="utf-8") as file:
+    with open("../../../appUpdates/appData/events.json", mode="w", encoding="utf-8") as file:
         json.dump(data, file, indent=3)
         
     print("Events were added to json")
