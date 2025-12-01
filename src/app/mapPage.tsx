@@ -221,13 +221,14 @@ export default function MapPage() {
     const gettingData = async () => {
       try {
 
+        const timeStamp = new Date().getTime()
         //Getting the closures json data from the location in file
-        const fetchClosure = await fetch('/realTimeData/closures.json?t=${timeStamp}');
+        const fetchClosure = await fetch(`/realTimeData/closures.json?t=${timeStamp}`);
         const closureData = await fetchClosure.json();
         setRawUpdates(closureData as Closures[]); //Setting closure data
 
         //Same thing for the Events
-        const fetchEvents = await fetch('/realTimeData/events.json?t=${timeStamp}');
+        const fetchEvents = await fetch(`/realTimeData/events.json?t=${timeStamp}`);
         const eventData = await fetchEvents.json();
         setRawEvents(eventData as Event[]); //Setting event data
 
@@ -409,7 +410,7 @@ export default function MapPage() {
                     const timeAgo = gettingTime(c.details["Closure Start Date"]);
 
                     return (
-                      <div key={c.id} className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                      <div key={c.id} className="bg-white p-4 rounded-x1 shadow-sm border border-gray-200">
                         <div className="flex items-start gap-3">
                           <span className="text-2xl">{warningIcons[urgency]}</span>
                           <div className="flex-1">
@@ -470,7 +471,7 @@ export default function MapPage() {
             </div>
 
             {/* Events Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
               {filteredEvents.length === 0 && (
                 <p className="text-center text-gray-500 md:col-span-2 py-8">No events match your filter.</p>
               )}
@@ -481,7 +482,7 @@ export default function MapPage() {
                 //Getting the tag for the rest of the images to update on the dispalay
                 const totalImages = allEvents[tag] || allEvents["General"]
                 return (
-                  <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+                  <div key={index} className="bg-white rounded-x1 shadow-md overflow-hidden flex flex-col">
                     {/* Image Placeholder */}
                     <div className="h-40 bg-gray-200 relative">
                       <Image 
@@ -559,7 +560,7 @@ export default function MapPage() {
           <nav className="flex-1 p-4 space-y-1">
             <button
               onClick={() => { setActiveTab("map"); setIsMenuOpen(false); }}
-              className="w-full flex items-center gap-3 p-3 rounded-lg transition hover:bg-white/10"
+              className="w-full flex items-center gap-3 p-3 rounded-x1 transition hover:bg-white/10"
               style={getMenuStyle("map")}
             >
               <Image src={logoMap} width={20} height={20} alt="" />
@@ -568,7 +569,7 @@ export default function MapPage() {
 
             <button
               onClick={() => { setActiveTab("events"); setIsMenuOpen(false); }}
-              className="w-full flex items-center gap-3 p-3 rounded-lg transition hover:bg-white/10"
+              className="w-full flex items-center gap-3 p-3 rounded-x1 transition hover:bg-white/10"
               style={getMenuStyle("events")}
             >
               <Image src={logoCal} width={20} height={20} alt="" />
@@ -577,7 +578,7 @@ export default function MapPage() {
 
             <button
               onClick={() => { setActiveTab("alerts"); setIsMenuOpen(false); }}
-              className="w-full flex items-center gap-3 p-3 rounded-lg transition hover:bg-white/10"
+              className="w-full flex items-center gap-3 p-3 rounded-x1 transition hover:bg-white/10"
               style={getMenuStyle("alerts")}
             >
               <Image src={logoAlert} width={20} height={20} alt="" />
@@ -586,7 +587,7 @@ export default function MapPage() {
 
             <button
               onClick={() => { setActiveTab("preferences"); setIsMenuOpen(false); }}
-              className="w-full flex items-center gap-3 p-3 rounded-lg transition hover:bg-white/10"
+              className="w-full flex items-center gap-3 p-3 rounded-x1 transition hover:bg-white/10"
               style={getMenuStyle("preferences")}
             >
               <Image src={logoGear} width={20} height={20} alt="" />

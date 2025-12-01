@@ -54,7 +54,7 @@ const MapComponent: React.FC = () => {
         container: mapRef.current,
         style: `https://maps.geoapify.com/v1/styles/osm-bright/style.json?apiKey=${apiKey}`, //Equivalent to Google 'roadmap'
         center: [position.lng, position.lat],
-        zoom: 16.75,
+        zoom: 16,
       });
 
       mapContainerRef.current = map;

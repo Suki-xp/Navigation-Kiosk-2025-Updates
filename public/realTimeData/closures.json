@@ -88,28 +88,6 @@
         }
     },
     {
-        "id": 20192,
-        "name": "Paths east of Patton Hall",
-        "type": "Current",
-        "details": {
-            "Closure Start Date": "2025-11-24 07:00:00",
-            "Closure End Date": "2025-11-28 17:00:00",
-            "COMMENTS": "The ADA accessible paths east of Patton Hall will be closed. Pedestrians who use the new ADA paths to traverse the hill between Holden Hall and Drillfield Drive may choose to use the interior elevator of Patton Hall to gain access to Drillfield Drive.",
-            "More Information": null
-        }
-    },
-    {
-        "id": 20193,
-        "name": "Sidewalk behind Lane Hall",
-        "type": "Current",
-        "details": {
-            "Closure Start Date": "2025-11-24 07:00:00",
-            "Closure End Date": "2025-11-26 17:00:00",
-            "COMMENTS": "Posts and chain will be installed on the sidewalk behind Lane Hall. Occupants may experience typical construction-related noise and dust associated with the work. Access to the sidewalk will also be limited.",
-            "More Information": null
-        }
-    },
-    {
         "id": 20198,
         "name": "Academic Building 1 Parking Gate Conduit",
         "type": "Scheduled",
