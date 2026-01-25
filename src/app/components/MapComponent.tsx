@@ -98,9 +98,14 @@ const MapComponent: React.FC = () => {
       return null;
     }
 
-    const url = `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(
-      query
-    )}&apiKey=${apikey}`;
+    //We want to add specific filitering for the map that will only bring up 
+    //Blacksburg, Virginia Locations for users to route
+    const locationBias = `proximity:-80.42224010371321,37.22610350373415`;
+    const filterBias = `rect:-80.5,37.15,-80.35,37.3`; 
+    //Creates a barrier arround the blacksburg locations for filtering
+
+    //Then we update the url to call those when fetching the JSON File format
+    const url = `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(query)}&${locationBias}&filter=${filterBias}&apiKey=${apikey}`;
 
     const res = await fetch(url); //gets the location before calling the json
     const data = await res.json();
@@ -115,10 +120,11 @@ const MapComponent: React.FC = () => {
   }
 
   //Tries to create the route of the locations from the GeoCode API
+  //for specific walking routes now
   async function geocodeRoute(start: {lat: number; lng: number }, end: {lat: number; lng: number}) 
   {
     const apikey = process.env.NEXT_PUBLIC_GEO_API_KEY;
-    const url = `https://api.geoapify.com/v1/routing?waypoints=${start.lat},${start.lng}|${end.lat},${end.lng}&mode=drive&apiKey=${apikey}`;
+    const url = `https://api.geoapify.com/v1/routing?waypoints=${start.lat},${start.lng}|${end.lat},${end.lng}&mode=walk&apiKey=${apikey}`;
 
     const res = await fetch(url);
     const data = await res.json();
@@ -260,7 +266,13 @@ const MapComponent: React.FC = () => {
       return[];
     }
 
-    const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&limit=5&apiKey=${apikey}`;
+    //We do the same thing by adding the bias filtering for the blacksburg locations
+    const locationBiasAgain = `proximity:-80.42224010371321,37.22610350373415`;
+    const filterBiasAgain = `rect:-80.5,37.15,-80.35,37.3`; 
+
+    const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&limit=5&${locationBiasAgain}&filter=${filterBiasAgain}&apiKey=${apikey}`;
+    //Notice how the parsing is done within the API call itself
+
     const res = await fetch(url);
     const data = await res.json();
 
@@ -351,8 +363,7 @@ const MapComponent: React.FC = () => {
 
 export default MapComponent;
 
-// — Helper functions —
-//Add a simple marker (non-pulsing; add animation later if needed)
+//Add a simple marker to the map
 function addMarker(map: maplibregl.Map,
   position: { lat: number; lng: number })
 {
