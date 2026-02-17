@@ -3,12 +3,14 @@ import { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import MapLegend from "./MapLegend";
+import { useAppSettings } from "../context/AppSettingsContext";
+import { translations } from "../translations";
 
 //Type for Geoapify autocomplete features
 //We create this custom interface because when we want the inputs/outputs
-//to be filled in like real maps, we can't use any of the UseState and rather 
+//to be filled in like real maps, we can't use any of the UseState and rather
 //need to reference the actually API feature call
-interface GeoapifyFeature 
+interface GeoapifyFeature
 {
   type: "Feature";
   properties: {
@@ -20,8 +22,31 @@ interface GeoapifyFeature
   };
 }
 
+// Updates map tile label language using MapLibre setLayoutProperty
+function updateMapLanguage(map: maplibregl.Map, lang: string) {
+  const style = map.getStyle();
+  if (!style || !style.layers) return;
+  style.layers.forEach((layer) => {
+    if (
+      layer.type === "symbol" &&
+      layer.layout &&
+      layer.layout["text-field"]
+    ) {
+      map.setLayoutProperty(
+        layer.id,
+        "text-field",
+        lang === "en"
+          ? ["coalesce", ["get", "name:en"], ["get", "name"]]
+          : ["coalesce", ["get", `name:${lang}`], ["get", "name:en"], ["get", "name"]]
+      );
+    }
+  });
+}
 
 const MapComponent: React.FC = () => {
+  const { language } = useAppSettings();
+  const t = translations[language];
+
   const mapRef = useRef<HTMLDivElement | null>(null);
   const mapContainerRef = useRef<maplibregl.Map | null>(null);
   //GeoJSON Data that will store the keys of the direction
@@ -31,7 +56,7 @@ const MapComponent: React.FC = () => {
   const [endInput, setEndInput] = useState("");
   const [routeLayerId] = useState("route-line"); //maps the distance between the points
   const [startSuggestions, setStartSuggestions] = useState<GeoapifyFeature[]>([]);
-  const [endSuggestions, setEndSuggestions] = useState<GeoapifyFeature[]>([]); 
+  const [endSuggestions, setEndSuggestions] = useState<GeoapifyFeature[]>([]);
   //These are the commnads that will outfill the input and outputs of the user for locations
 
   useEffect(() => {
@@ -69,7 +94,8 @@ const MapComponent: React.FC = () => {
       map.on("load", () => {
         setIsMapLoading(false);
         map.dragPan.enable();
-        
+        // Apply current language to map labels on initial load
+        updateMapLanguage(map, language);
       });
     };
 
@@ -78,17 +104,25 @@ const MapComponent: React.FC = () => {
 
     //Restarts the map process
     return () => {
-      if (mapContainerRef.current) 
+      if (mapContainerRef.current)
       {
         mapContainerRef.current.remove();
         mapContainerRef.current = null;
       }
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  //This will use the GeoCode import to reference where the coordinate systems are 
+  // Update map tile labels whenever language changes (after map is initialized)
+  useEffect(() => {
+    if (mapContainerRef.current && !isMapLoading) {
+      updateMapLanguage(mapContainerRef.current, language);
+    }
+  }, [language, isMapLoading]);
+
+  //This will use the GeoCode import to reference where the coordinate systems are
   //specifically the address
-  async function geocodeAddress(query: string): Promise<{ lat: number; lng: number} | null> 
+  async function geocodeAddress(query: string): Promise<{ lat: number; lng: number} | null>
   {
     const apikey = process.env.NEXT_PUBLIC_GEO_API_KEY;
     //check to make sure it can still access the key
@@ -98,10 +132,10 @@ const MapComponent: React.FC = () => {
       return null;
     }
 
-    //We want to add specific filitering for the map that will only bring up 
+    //We want to add specific filitering for the map that will only bring up
     //Blacksburg, Virginia Locations for users to route
     const locationBias = `proximity:-80.42224010371321,37.22610350373415`;
-    const filterBias = `rect:-80.5,37.15,-80.35,37.3`; 
+    const filterBias = `rect:-80.5,37.15,-80.35,37.3`;
     //Creates a barrier arround the blacksburg locations for filtering
 
     //Then we update the url to call those when fetching the JSON File format
@@ -121,18 +155,18 @@ const MapComponent: React.FC = () => {
 
   //Tries to create the route of the locations from the GeoCode API
   //for specific walking routes now
-  async function geocodeRoute(start: {lat: number; lng: number }, end: {lat: number; lng: number}) 
+  async function geocodeRoute(start: {lat: number; lng: number }, end: {lat: number; lng: number})
   {
     const apikey = process.env.NEXT_PUBLIC_GEO_API_KEY;
     const url = `https://api.geoapify.com/v1/routing?waypoints=${start.lat},${start.lng}|${end.lat},${end.lng}&mode=walk&apiKey=${apikey}`;
 
     const res = await fetch(url);
     const data = await res.json();
-    
+
     return data;
   }
 
-  //Handles the route pattern of the locations 
+  //Handles the route pattern of the locations
   async function handleRouting()
   {
     if (!mapContainerRef.current)
@@ -147,20 +181,20 @@ const MapComponent: React.FC = () => {
 
     if (!start || !end)
     {
-      alert("Locations couldn't be mapped or found, try again")
+      alert(t.locationNotFound)
       return;
     }
 
     const routeData = await geocodeRoute(start, end);
     if (!routeData || !routeData.features || routeData.features.length == 0)
     {
-      alert("No route found, try different locations")
+      alert(t.noRouteFound)
       return;
     }
     //Calls the functions respectively for the addresse and route tied to them
 
-    const routeFeature = routeData.features[0]; //Gets the total distance 
-    //to basically map for the user when they locate two points 
+    const routeFeature = routeData.features[0]; //Gets the total distance
+    //to basically map for the user when they locate two points
 
     //Remove old route
     if (map.getLayer(routeLayerId))
@@ -189,9 +223,9 @@ const MapComponent: React.FC = () => {
     });
 
     map.addLayer({
-      id: routeLayerId, 
+      id: routeLayerId,
       type: "line",
-      source: routeLayerId, 
+      source: routeLayerId,
       paint: {
         "line-color": "#00008b",
         "line-width": 6,
@@ -239,7 +273,7 @@ const MapComponent: React.FC = () => {
     {
         map.fitBounds(bounds, { padding: 60, maxZoom: 20})
     }
-    else 
+    else
     {
         //Centering at the midpoint but keeping the zoom for route
         const midLeft = (startPoint[1] + endPoint[1]) / 2;
@@ -247,7 +281,7 @@ const MapComponent: React.FC = () => {
         //The ease to command to tie
         map.easeTo({
           center: [midRight, midLeft],
-          zoom: map.getZoom(), 
+          zoom: map.getZoom(),
           duration: 1000,
         })
     }
@@ -268,7 +302,7 @@ const MapComponent: React.FC = () => {
 
     //We do the same thing by adding the bias filtering for the blacksburg locations
     const locationBiasAgain = `proximity:-80.42224010371321,37.22610350373415`;
-    const filterBiasAgain = `rect:-80.5,37.15,-80.35,37.3`; 
+    const filterBiasAgain = `rect:-80.5,37.15,-80.35,37.3`;
 
     const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&limit=5&${locationBiasAgain}&filter=${filterBiasAgain}&apiKey=${apikey}`;
     //Notice how the parsing is done within the API call itself
@@ -277,14 +311,14 @@ const MapComponent: React.FC = () => {
     const data = await res.json();
 
     return data.features as GeoapifyFeature[] || [];
-    
+
   }
 
   return (
     <div className="relative flex flex-col h-full bg-text-black-200">
       {isMapLoading && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70"> 
-          <p>Loading map…</p>
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70">
+          <p>{t.loadingMap}</p>
         </div>
       )}
 
@@ -292,7 +326,7 @@ const MapComponent: React.FC = () => {
         <div className="StartRoutingPath">
           <input
             type="text"
-            placeholder="From:"
+            placeholder={t.fromPlaceholder}
             value={startInput}
             onChange={async (e) => {
               setStartInput(e.target.value)
@@ -319,9 +353,9 @@ const MapComponent: React.FC = () => {
         </div>
 
         <div className="end path routing">
-          <input 
+          <input
             type="text"
-            placeholder="To:"
+            placeholder={t.toPlaceholder}
             value={endInput}
             onChange={async (e) => {
               setEndInput(e.target.value)
@@ -335,7 +369,7 @@ const MapComponent: React.FC = () => {
                 <li
                   key={idx}
                   onClick={() => {
-                    setEndInput(s.properties.formatted);  //Autofill word formatting 
+                    setEndInput(s.properties.formatted);  //Autofill word formatting
                     setEndSuggestions([]);
                   }}
                   className="text-black px-2 py-1 hover:bg-black-100 cursor-pointer"
@@ -347,11 +381,11 @@ const MapComponent: React.FC = () => {
           )}
         </div>
 
-        <button 
+        <button
           onClick={handleRouting}
           className="bg-blue-600 text-white px-3 py-1 rounded" //Routing button
         >
-          Route
+          {t.route}
         </button>
       </div>
 
