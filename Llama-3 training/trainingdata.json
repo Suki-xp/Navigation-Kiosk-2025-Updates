@@ -1,0 +1,31 @@
+[
+{
+    "Instruction": "How do I get from Cowgill Hall to Norris Hall",
+    "Input": "From Cowgill Hall to Hancock Hall: Head NorthEast 266ft, Turn Left from Hancock Hall and Walk 532 ft across Burruss Hall, Take the Stairs and Turn left 266 ft, Destination on left",
+    "Output": "Exit Cowgill Hall top level door and head for Hancock Hall which is to your left, once you reach there you want to turn left and head down that path past the large hokie stone building on your left. From there you're gonna hit a set of stairs which you wanna take and then turn left. Then walk straight down, Hancock Hall will be the first building you see on your left with the large wood door"
+},
+
+{
+    "Instruction": "How do I get from War Memorial Hall to Hitt Hall",
+    "Input": "From War Memorial Hall to Hitt Hall: Head Southwest on Drillfield Dr 161 ft, Turn Right and head across for 0.2 miles, Turn left towards Hitt/Derring Service Road 92 ft, Turn Right towards Hitt/Derring Service Road 180 ft, Turn left towards Hitt/Derring Service Road 213 ft, Turn right towards Hitt/Derring Service road 89 ft, Then Continue onto Hitt/Derring Service road for 218 ft, Destination on right",
+    "Output": "Exit War Memorial Hall main doors and take a quick left, walking down until you reach the sidewalk. Cross the sidewalk and walk straight all the way across the entire Drillfield lot. Cross the second crosswalk and take a slight right and continue up the path. Keep walking down that path until you fully pass the Johnston Student Center on your right. Once you meet those set of two stairs take them both, Hitt Hall will be the first building you see on your left with the modern glass and steel look"
+},
+
+{
+    "Instruction": "How do I get from Newman Library to Surge Space building",
+    "Input": "From Newman Library to Surge Space building: Head straight towards Drillfield Drive 115 ft, Turn Right onto Drillfield Dr 381 ft, Continue onto Stanger Street 0.2 miles, Turn right onto Perry Street 177, Destination in front",
+    "Output": "Heading out of Newman Library main doors you want to take right and head up the street, making sure you're past the Pylons memorial and continue heading up that path. Once you reach near the road, take the nearest crosswalk and turn left right after. From there keep heading down that path until you meet the intersection. From the intersection keep going forward and continue down until you see the first crosswalk at the roundabout. From there take a right cross it, and Surge Space Building will be the first building in front of you with a large rectangle like design "
+},
+
+{
+    "Instruction": "How do I get from West Ambler Johnston Hall to Payne Hall",
+    "Input": "From West Ambler Johnston Hall to Payne Hall: Head north 131 ft, Turn Right towards Ag-Quad Lane 367 ft, Turn Right towards Ag-Quad Lane 26 ft, Take the stairs and Turn Left onto Ag-Quad Lane, Take the stairs and turn Right, Continue down path for 0.1 miles, Take the stairs and Turn Right, Destination on your right",
+    "Output": "As you exit West Ambler Johnston Hall main doors you wanna take the first right past West End Market and Continue down that path that leads to Derring Hall. Once you're at Derring Hall keep going down until you meet the Hokie Bird Statue and come across a set of stairs. Walk down those stairs and continue heading straight passing through the first archway. Once you're through that archway you should be at the Peddrew-Yates Hall Dorms and to your left with a double decker glass building should be the Payne Hall dorms"
+},
+
+{
+    "Instruction": "How do I get from Burruss Hall to Williams Hall",
+    "Input": "From Burruss Hall to Williams Hall: Head North 200 ft, Turn Right onto Drillfield Drive, Continue straight down Drillfield Drive for 0.4 miles. Destination on your right",
+    "Output": "Coming outside from Burruss Hall main entrance you want to walk down the set of stairs and path towards where the April 16 Memorial is overlooking the drillfield. When you get to the street take a right, and continue walking down that path until you see the Williams Hall sign. The building should be on your right, with a rectangle shape made via hokie stone with lined windows"
+}
+]
