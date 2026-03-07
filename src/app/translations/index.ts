@@ -100,7 +100,7 @@ export const translations: Record<Language, Translations> = {
     off: "Off",
     displaySettings: "Display Settings",
   },
-  es: {
+  es: { //needs revising
     campusMap: "Mapa del Campus",
     menu: "MEN\u00DA",
     maps: "Mapas",
