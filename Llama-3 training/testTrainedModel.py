@@ -16,12 +16,12 @@ bnb_config = BitsAndBytesConfig(
 
 #Now we will load in the model from its saved point at
 startModel = AutoModelForCausalLM.from_pretrained(
-    "meta-llama/Meta-Llama-3-8B-Instruct",
+    "meta-llama/Llama-3.2-3B-Instruct",
     quantization_config=bnb_config,
     device_map="auto"
 )
 
-tokenizer = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B-Instruct")
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.2-3B-Instruct")
 tokenizer.pad_token = tokenizer.eos_token
 
 directionModel = PeftModel.from_pretrained(startModel, "./final-vt-navigation-lora",
