@@ -1,5 +1,4 @@
 #Will contain the script for taking in the user input for directions to try and formulate the correct responses
-#(also taken from google collab)
 !pip install -U bitsandbytes>=0.46.1
 
 import torch
@@ -26,7 +25,7 @@ tokenizer.pad_token = tokenizer.eos_token
 
 directionModel = PeftModel.from_pretrained(startModel, "./final-vt-navigation-lora",
     is_trainable = True)
-modelKey = "f69638af6fb14421a4847b87157d6310"
+geoKey = "f69638af6fb14421a4847b87157d6310"
 
 #After that we can create the loop to format if it takes the user input or not
 while True:
@@ -36,9 +35,9 @@ while True:
   if user_prompt.lower() == "exit":
     print("Exiting directions")
     break
-  
+
   elif user_prompt == "" or "to" not in user_prompt:
-    print("Please enter vaild input of locations!")
+    print("Please enter vaild input of locations using to!")
     continue
 
   try:
@@ -49,22 +48,22 @@ while True:
       destination = split_prompt[1].strip()
 
       #After the split we need to create the GeoApify logic to match with the split at each of the directional points
-      #we are going to copy a lot of the same logic that we had in the implementation of the react 
+      #we are going to copy a lot of the same logic that we had in the implementation of the react
 
       #Start coordinates
-      url = f"https://api.geoapify.com/v1/geocode/search?text={origin}&apiKey={modelKey}"
+      url = f"https://api.geoapify.com/v1/geocode/search?text={origin}&apiKey={geoKey}"
       response = requests.get(url)
       data = response.json()
       start_lng, start_lat = data['features'][0]['geometry']['coordinates']
 
       #End coordiantes
-      url = f"https://api.geoapify.com/v1/geocode/search?text={destination}&apiKey={modelKey}"
+      url = f"https://api.geoapify.com/v1/geocode/search?text={destination}&apiKey={geoKey}"
       response = requests.get(url)
       data = response.json()
       end_lng, end_lat = data['features'][0]['geometry']['coordinates']
 
       #Getting the route by blending it all together now
-      url = f"https://api.geoapify.com/v1/routing?waypoints={start_lat},{start_lng}|{end_lat},{end_lng}&mode=walk&apiKey={modelKey}"
+      url = f"https://api.geoapify.com/v1/routing?waypoints={start_lat},{start_lng}|{end_lat},{end_lng}&mode=walk&apiKey={geoKey}"
       response = requests.get(url)
       route_data = response.json()
 
@@ -83,11 +82,18 @@ while True:
       #Converting the user input into tokens first
       covert_tokens = tokenizer(full_prompt, return_tensors="pt").to(directionModel.device)
       response_tokens = directionModel.generate(**covert_tokens,
-      max_new_tokens=600, do_sample=True, pad_token_id=tokenizer.eos_token_id)
+      max_new_tokens=2500, do_sample=True, pad_token_id=tokenizer.eos_token_id)
 
       #Then we can format the walking directions through
       formatted_response = tokenizer.decode(response_tokens[0], skip_special_tokens=True)
-      print(f"Here are your directions!: {formatted_response}")
+      if "Output:" in formatted_response:
+        natural_directions = formatted_response.split("Output:")[-1].strip()
+      else:
+        natural_directions = formatted_response
+
+      #Fixing the format of the response
+      response_sentences = natural_directions.replace(". ", ".\n").strip()
+      print(f"\nHere are your directions! :\n{response_sentences}\n")
 
   except Exception as error:
       print(f"An error occurred due to: {error}")
