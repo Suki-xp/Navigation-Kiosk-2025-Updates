@@ -1,16 +1,31 @@
-#Will setup the data to then be loaded into the model to begin the training process
+#Will setup the data to then be loaded into the model to begin the training process (taken from google collab code written)
+!pip install -U bitsandbytes>=0.46.1
+
 from datasets import load_dataset
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 from peft import LoraConfig, get_peft_model, TaskType, prepare_model_for_kbit_training
 from transformers import TrainingArguments, Trainer
 import torch
-import os
 from huggingface_hub import login
 import gc
 
+# Securely import the Hugging Face token from Colab Secrets
+from google.colab import userdata
+
 #Gets access to the the model data but now  we want to convert that
 #json into a hugging face dataset that we can use to train
-login(token=os.getenv("HF_TOKEN"), add_to_git_credential=True)
+try:
+    HF_TOKEN = userdata.get('HF_TOKEN')
+
+except userdata.SecretNotFoundError:
+    print("Model Token couldn't be found try again")
+    HF_TOKEN = None
+
+if HF_TOKEN:
+    login(token=HF_TOKEN, add_to_git_credential=True)
+else:
+    print("Login skipped due to missing token.")
+
 modelData = load_dataset("json", data_files="/content/drive/MyDrive/trainingdata.json")
 
 #Making sure that memory cache can be cleared through the runs
@@ -22,7 +37,7 @@ modelPath = "meta-llama/Meta-Llama-3-8B-Instruct"
 
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
-    bnb_4bit_quant_type="nf4",      
+    bnb_4bit_quant_type="nf4",
     bnb_4bit_use_double_quant=True,   #Optimizing the model more to handle the 8gb capacity
     bnb_4bit_compute_dtype=torch.float16
 )
