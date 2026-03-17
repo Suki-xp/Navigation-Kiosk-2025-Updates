@@ -33,7 +33,7 @@ torch.cuda.empty_cache()
 gc.collect()
 
 #Now lets load our model up with its tokens
-modelPath = "meta-llama/Meta-Llama-3-8B-Instruct"
+modelPath = "meta-llama/Llama-3.2-3B-Instruct"
 
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
