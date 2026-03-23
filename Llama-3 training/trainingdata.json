@@ -27,5 +27,120 @@
     "Instruction": "How do I get from Burruss Hall to Williams Hall",
     "Input": "From Burruss Hall to Williams Hall: Head North 200 ft, Turn Right onto Drillfield Drive, Continue straight down Drillfield Drive for 0.4 miles. Destination on your right",
     "Output": "Coming outside from Burruss Hall main entrance you want to walk down the set of stairs and path towards where the April 16 Memorial is overlooking the drillfield. When you get to the street take a right, and continue walking down that path until you see the Williams Hall sign. The building should be on your right, with a rectangle shape made via hokie stone with lined windows"
+},
+
+{
+    "Instruction": "Convert these technical walking directions into natural VT campus directions",
+    "Input": "From Newman Library to Cassell Coliseum: Head south 98ft, Turn right onto Drillfield Dr 423ft, Continue straight 0.3 miles, Turn left onto Washington St 289ft, Turn right onto Beamer Way 157ft, Destination on left",
+    "Output": "Walk out of Newman Library and take a right heading down Drillfield Drive. Keep walking past McBryde Hall and continue down that same path for a good while. When you reach the main road near the stadium area, turn left and walk toward the athletic buildings. Cassell Coliseum will be the large dome-shaped building on your left with the orange VT logos."
+},
+
+{
+    "Instruction": "Convert these technical walking directions into natural VT campus directions",
+    "Input": "From Goodwin Hall to Squires Student Center: Head northeast 156ft, Turn left onto Alumni Mall 0.2 miles, Turn right at crosswalk 45ft, Continue onto plaza 112ft, Destination ahead",
+    "Output": "Exit Goodwin Hall and head toward the main walkway. Turn left and walk up Alumni Mall - you'll pass several academic buildings on both sides. When you see the April 16 Memorial on your right, take the crosswalk and head toward the brick plaza area. Squires Student Center is the large building straight ahead with multiple entrances and the food court inside."
+},
+
+{
+    "Instruction": "Convert these technical walking directions into natural VT campus directions",
+    "Input": "From Lane Stadium to Torgersen Hall: Head north on Beamer Way 312ft, Turn right onto Washington St 0.4 miles, Turn left at crosswalk 67ft, Bear right onto walkway 134ft, Destination on right",
+    "Output": "Walk out of Lane Stadium toward the main campus area heading away from the parking lots. Turn right and follow Washington Street for several blocks - you'll pass War Memorial Chapel and athletic facilities. Cross at the traffic light and bear right onto the main academic walkway. Torgersen Hall is the modern building on your right with the distinctive glass facade and study spaces visible from outside."
+
+},
+
+
+{
+    "Instruction": "Convert these technical walking directions into natural VT campus directions",
+    "Input": "From Dietrick Hall to McBryde Hall: Head west 89ft, Turn left onto path 267ft, Cross Drillfield 0.1 miles, Turn right onto sidewalk 78ft, Destination on left",
+    "Output": "Exit Dietrick dining hall and take a left walking down toward the main pathways. Head across the Drillfield - that's the big open grassy area in the center of campus. Once you're on the other side, take a right and walk along the academic buildings. McBryde Hall is one of the first buildings you'll see on your left - it's the older brick building where a lot of math and physics classes are held."
+
+},
+
+
+{
+    "Instruction": "Convert these technical walking directions into natural VT campus directions",
+    "Input": "From Burruss Hall to Lavery Hall: Head east 134ft, Turn right onto path 198ft, Continue straight 156ft, Turn left 89ft, Destination ahead",
+    "Output": "Walk down the front steps of Burruss Hall and head toward the right side of the Drillfield. Continue along the pathway keeping the academic buildings on your right. When you reach the crosswalk near the War Memorial area, turn left and Lavery Hall will be right there - it's connected to some of the other academic buildings in that cluster."
+
+},
+
+
+{
+    "Instruction": "Convert these technical walking directions into natural VT campus directions",
+    "Input": "From Owens Hall to Durham Hall: Head southwest 223ft, Turn right onto walkway 0.2 miles, Turn left at intersection 112ft, Continue straight 167ft, Destination on right",
+    "Output": "Head out of Owens dining hall and walk toward the main campus pathways going away from the residential side. Turn right and follow the walkway for a good distance - you'll be heading toward the engineering area of campus. At the intersection near the newer buildings, turn left. Durham Hall is on your right - it's one of the newer academic buildings with modern architecture and lots of windows."
+
+},
+
+
+{
+    "Instruction": "Convert these technical walking directions into natural VT campus directions",
+    "Input": "From Whittemore Hall to Lane Stadium: Head south 178ft, Turn left onto Washington St 0.5 miles, Continue straight 289ft, Turn right onto Beamer Way 134ft, Destination ahead",
+    "Output": "Exit Whittemore and head down toward Washington Street. Turn left and it's a pretty long walk down this main road - you'll pass a bunch of academic buildings and then residential areas. Keep going straight past the War Memorial area. When you get closer to the athletic complex, turn right onto the stadium approach road. Lane Stadium is the massive football stadium straight ahead - you can't miss it on game days!"
+
+},
+
+
+{
+    "Instruction": "Convert these technical walking directions into natural VT campus directions",
+    "Input": "From Graduate Life Center to West End Market: Head northwest 267ft, Turn right onto path 145ft, Turn left toward residential area 198ft, Continue straight 112ft, Destination on left",
+    "Output": "Walk out of the Graduate Life Center at Donaldson Brown and head up toward the main pathways. Take a right and then a left heading into the upper campus residential area. Keep walking straight through the dorm complex. West End Market is on your left - it's the dining facility that serves the Ambler Johnston area with the outdoor seating visible from the path."
+
+},
+
+
+{
+    "Instruction": "Convert these technical walking directions into natural VT campus directions",
+    "Input": "From Pritchard Hall to Goodwin Hall: Head west 198ft, Turn left onto sidewalk 0.3 miles, Cross at traffic light 45ft, Turn right onto Alumni Mall 156ft, Destination on left",
+    "Output": "Exit Pritchard and walk toward the main road heading away from the upper quad residential area. Turn left and follow the sidewalk for a while - you'll be walking downhill toward central campus. Cross at the traffic light carefully and then turn right onto Alumni Mall. Goodwin Hall is on your left - it's the large modern engineering building with the cool architectural design."
+
+},
+
+
+{
+    "Instruction": "Convert these technical walking directions into natural VT campus directions",
+    "Input": "From Cheatham Hall to Henderson Hall: Head northeast 134ft, Turn right onto path 289ft, Continue onto walkway 167ft, Turn left 78ft, Destination on right",
+    "Output": "Walk out of Cheatham Hall and head toward the main campus pathways on the northeast side. Turn right and follow the path between buildings. Continue straight for a bit and then take a left. Henderson Hall is on your right - it's part of the arts and architecture area so you might see students working on projects outside."
+
+},
+
+
+{
+    "Instruction": "Convert these technical walking directions into natural VT campus directions",
+    "Input": "From Pamplin Hall to Holden Hall: Head north 112ft, Turn left onto Drillfield area 245ft, Bear right onto path 134ft, Cross walkway 56ft, Destination ahead",
+    "Output": "Exit Pamplin Hall and head toward the Drillfield area. Turn left and walk across part of the open space. Bear right onto one of the main pathways that cuts through campus. Cross over the walkway intersection and Holden Hall is straight ahead - it's one of the classic brick academic buildings in the central campus cluster."
+
+},
+
+
+{
+    "Instruction": "Convert these technical walking directions into natural VT campus directions",
+    "Input": "From Slusher Hall to Squires Student Center: Head south 289ft, Turn right onto main path 0.2 miles, Continue past chapel 178ft, Turn left at plaza 89ft, Destination ahead",
+    "Output": "Walk out of Slusher Tower and head down the hill going south. Turn right onto the main pathway that runs through upper campus. You'll walk past War Memorial Chapel on your left - keep going straight. When you reach the brick plaza area, turn left and Squires Student Center is right there with all the food options and meeting spaces."
+
+},
+
+
+{
+    "Instruction": "Convert these technical walking directions into natural VT campus directions",
+    "Input": "From Litton-Reaves Hall to Engel Hall: Head east 167ft, Turn left onto path 134ft, Continue straight 98ft, Turn right 67ft, Destination on left",
+    "Output": "Exit Litton-Reaves and walk toward the eastern side of the building. Turn left onto the pathway between the agricultural buildings. Keep going straight for a bit and then take a right. Engel Hall is on your left - it's another one of the ag science buildings in this cluster on the south side of campus."
+
+},
+
+
+{
+    "Instruction": "Convert these technical walking directions into natural VT campus directions",
+    "Input": "From McComas Hall to Newman Library: Head northeast 312ft, Turn right at intersection 0.3 miles, Cross Drillfield 245ft, Continue straight 156ft, Destination on right",
+    "Output": "Walk out of McComas gym and head northeast toward main campus. At the intersection turn right and walk up the main road for a good distance. You'll eventually reach the Drillfield - cut across the open grass area heading toward the academic buildings. Keep going straight on the other side and Newman Library is on your right - the large brick building that's the main library on campus."
+
+},
+
+
+{
+    "Instruction": "Convert these technical walking directions into natural VT campus directions",
+    "Input": "From Architecture Annex to Burruss Hall: Head west 198ft, Turn right onto path 267ft, Continue onto Alumni Mall 0.2 miles, Bear left toward Drillfield 123ft, Destination ahead",
+    "Output": "Exit the Architecture Annex and head west toward the main pathways. Turn right and then continue onto Alumni Mall - this is the wide walkway with trees on both sides. Walk up Alumni Mall for several blocks and then bear left when you get near the Drillfield. Burruss Hall is straight ahead - it's the iconic building with the columns at the top of the Drillfield that you see in all the VT photos."
+
 }
 ]
