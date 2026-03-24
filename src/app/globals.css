@@ -89,3 +89,18 @@ body {
   color: #f0c040 !important;
   border: 2px solid #6a6a8a !important;
 }
+
+/* High contrast: map legend */
+[data-high-contrast="true"] .bg-white\/90 {
+  background-color: #22223a !important;
+  border: 1px solid #6a6a8a;
+}
+[data-high-contrast="true"] .bg-red-600\/30 {
+  background-color: rgba(239, 68, 68, 0.5) !important;
+}
+[data-high-contrast="true"] .bg-orange-400\/30 {
+  background-color: rgba(251, 191, 36, 0.5) !important;
+}
+[data-high-contrast="true"] .bg-\[\#1E40AF\]\/50 {
+  background-color: rgba(96, 165, 250, 0.7) !important;
+}
