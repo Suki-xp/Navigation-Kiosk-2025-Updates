@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import MapLegend from "./MapLegend";
@@ -20,6 +20,26 @@ interface GeoapifyFeature
     type: string;
     coordinates: [number, number];
   };
+}
+
+interface ClosureFeature {
+  id: number;
+  name: string;
+  type: string;
+  geometry?: {
+    type: "Polygon" | "Point";
+    coordinates: number[][][] | number[];
+  } | null;
+  details: {
+    "Closure Start Date": string;
+    "Closure End Date": string;
+    COMMENTS: string;
+    "More Information": string;
+  };
+}
+
+interface MapComponentProps {
+  closures?: ClosureFeature[];
 }
 
 // Updates map tile label language using MapLibre setLayoutProperty
@@ -43,7 +63,7 @@ function updateMapLanguage(map: maplibregl.Map, lang: string) {
   });
 }
 
-const MapComponent: React.FC = () => {
+const MapComponent: React.FC<MapComponentProps> = ({ closures = [] }) => {
   const { language } = useAppSettings();
   const t = translations[language];
 
@@ -119,6 +139,98 @@ const MapComponent: React.FC = () => {
       updateMapLanguage(mapContainerRef.current, language);
     }
   }, [language, isMapLoading]);
+
+  // Build a GeoJSON FeatureCollection from closure data
+  const buildClosureFC = useCallback((items: ClosureFeature[]) => ({
+    type: "FeatureCollection" as const,
+    features: items
+      .filter((c) => c.geometry)
+      .map((c) => ({
+        type: "Feature" as const,
+        properties: {
+          id: c.id,
+          name: c.name,
+          closureType: c.type,
+          startDate: c.details["Closure Start Date"],
+          endDate: c.details["Closure End Date"],
+          comments: c.details.COMMENTS,
+          url: c.details["More Information"],
+        },
+        geometry: c.geometry!,
+      })),
+  }), []);
+
+  // Render closure polygons/points on the map
+  useEffect(() => {
+    const map = mapContainerRef.current;
+    if (!map || isMapLoading) return;
+
+    const currentClosures = closures.filter((c) => c.type === "Current");
+    const scheduledClosures = closures.filter((c) => c.type === "Scheduled");
+
+    const layerConfigs = [
+      { sourceId: "closures-current-source", fillId: "closures-current-fill", outlineId: "closures-current-outline", pointId: "closures-current-points", color: "#B91C1C", data: buildClosureFC(currentClosures) },
+      { sourceId: "closures-scheduled-source", fillId: "closures-scheduled-fill", outlineId: "closures-scheduled-outline", pointId: "closures-scheduled-points", color: "#F59E0B", data: buildClosureFC(scheduledClosures) },
+    ];
+
+    for (const cfg of layerConfigs) {
+      const existing = map.getSource(cfg.sourceId) as maplibregl.GeoJSONSource | undefined;
+      if (existing) {
+        existing.setData(cfg.data as GeoJSON.FeatureCollection);
+      } else {
+        map.addSource(cfg.sourceId, { type: "geojson", data: cfg.data as GeoJSON.FeatureCollection });
+
+        map.addLayer({
+          id: cfg.fillId,
+          type: "fill",
+          source: cfg.sourceId,
+          filter: ["==", "$type", "Polygon"],
+          paint: { "fill-color": cfg.color, "fill-opacity": 0.3 },
+        });
+
+        map.addLayer({
+          id: cfg.outlineId,
+          type: "line",
+          source: cfg.sourceId,
+          filter: ["==", "$type", "Polygon"],
+          paint: { "line-color": cfg.color, "line-width": 2 },
+        });
+
+        map.addLayer({
+          id: cfg.pointId,
+          type: "circle",
+          source: cfg.sourceId,
+          filter: ["==", "$type", "Point"],
+          paint: { "circle-radius": 8, "circle-color": cfg.color, "circle-opacity": 0.6, "circle-stroke-width": 2, "circle-stroke-color": cfg.color },
+        });
+
+        // Click popup for polygons and points
+        for (const layerId of [cfg.fillId, cfg.pointId]) {
+          map.on("click", layerId, (e) => {
+            if (!e.features || e.features.length === 0) return;
+            const props = e.features[0].properties;
+            const urlHtml = props.url && props.url !== "N/A" && props.url !== "null"
+              ? `<a href="${props.url}" target="_blank" rel="noopener noreferrer" style="font-size:12px;color:#1d4ed8">More Info</a>`
+              : "";
+            new maplibregl.Popup({ maxWidth: "280px" })
+              .setLngLat(e.lngLat)
+              .setHTML(
+                `<div>
+                  <strong style="font-size:14px">${props.name}</strong>
+                  <p style="margin:4px 0;font-size:13px">${props.comments}</p>
+                  <p style="font-size:12px;color:#666">${props.startDate} &mdash; ${props.endDate}</p>
+                  ${urlHtml}
+                </div>`
+              )
+              .addTo(map);
+          });
+
+          map.on("mouseenter", layerId, () => { map.getCanvas().style.cursor = "pointer"; });
+          map.on("mouseleave", layerId, () => { map.getCanvas().style.cursor = ""; });
+        }
+      }
+    }
+  }, [closures, isMapLoading, buildClosureFC]);
 
   //This will use the GeoCode import to reference where the coordinate systems are
   //specifically the address

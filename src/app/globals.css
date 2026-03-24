@@ -31,61 +31,61 @@ body {
   --font-scale: 1;
 }
 
-/* High contrast theme */
+/* High contrast theme — softer palette */
 [data-high-contrast="true"] {
-  --bg: #000;
-  --text: #fff;
-  --accent: #ffff00;
+  --bg: #1a1a2e;
+  --text: #eef0f4;
+  --accent: #f0c040;
   background-color: var(--bg) !important;
   color: var(--text) !important;
 }
 [data-high-contrast="true"] .bg-\[\#6B1F3D\] {
-  background-color: #000 !important;
-  border: 2px solid #fff;
+  background-color: #2b1a2e !important;
+  border: 2px solid #c9a0b0;
 }
 [data-high-contrast="true"] .bg-white {
-  background-color: #000 !important;
+  background-color: #1a1a2e !important;
 }
 [data-high-contrast="true"] .text-gray-600,
 [data-high-contrast="true"] .text-gray-700 {
-  color: #fff !important;
+  color: #d0d4dc !important;
 }
 [data-high-contrast="true"] .bg-gray-100 {
-  background-color: #000 !important;
+  background-color: #1a1a2e !important;
 }
 [data-high-contrast="true"] .bg-gray-200 {
-  background-color: #222 !important;
-  color: #fff !important;
+  background-color: #2a2a40 !important;
+  color: #eef0f4 !important;
 }
 [data-high-contrast="true"] .text-gray-800,
 [data-high-contrast="true"] .text-gray-900 {
-  color: #fff !important;
+  color: #eef0f4 !important;
 }
 [data-high-contrast="true"] .text-gray-500 {
-  color: #ccc !important;
+  color: #a0a8b8 !important;
 }
 
 /* High contrast: inputs and suggestion lists in map routing panel */
 [data-high-contrast="true"] input {
-  background-color: #000 !important;
-  color: #fff !important;
-  border-color: #fff !important;
+  background-color: #22223a !important;
+  color: #eef0f4 !important;
+  border-color: #6a6a8a !important;
 }
 [data-high-contrast="true"] input::placeholder {
-  color: #aaa !important;
+  color: #8888a8 !important;
 }
 [data-high-contrast="true"] ul {
-  background-color: #111 !important;
-  border-color: #fff !important;
+  background-color: #22223a !important;
+  border-color: #6a6a8a !important;
 }
 [data-high-contrast="true"] ul li {
-  color: #fff !important;
+  color: #eef0f4 !important;
 }
 [data-high-contrast="true"] ul li:hover {
-  background-color: #333 !important;
+  background-color: #3a3a55 !important;
 }
 [data-high-contrast="true"] .bg-blue-600 {
-  background-color: #000 !important;
-  color: #ffff00 !important;
-  border: 2px solid #fff !important;
+  background-color: #2a2a50 !important;
+  color: #f0c040 !important;
+  border: 2px solid #6a6a8a !important;
 }

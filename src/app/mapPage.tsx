@@ -66,6 +66,10 @@ const allEvents: { [key: string]: StaticImageData | string } =
     id: number;
     name: string;
     type: string;
+    geometry?: {
+      type: "Polygon" | "Point";
+      coordinates: number[][][] | number[];
+    } | null;
     details: {
       "Closure Start Date": string,
       "Closure End Date": string,
@@ -432,7 +436,7 @@ export default function MapPage() {
 
         <div className="flex-1 relative overflow-y-auto">
         {/* Map view */}
-        {activeTab === "map" && <MapComponent />}
+        {activeTab === "map" && <MapComponent closures={rawUpdates} />}
 
         {/*Alert tab*/}
         {activeTab === "alerts" && (

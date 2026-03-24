@@ -32,7 +32,8 @@ def running():
         params = {
             'where': '1=1',
             'outFields': '*',
-            'returnGeometry': 'false',
+            'returnGeometry': 'true',
+            'outSR': '4326',
             'f': 'json'
         }
         #This first attempt is sending the HTTP request to make sure that it 
@@ -51,14 +52,21 @@ def running():
             #This takes that idea and just loops through before constructing the format
             for feature in data['features']:
                 attr = feature['attributes']
+                raw_geom = feature.get('geometry', None)
+                geojson_geom = None
+                if raw_geom and 'rings' in raw_geom:
+                    geojson_geom = {"type": "Polygon", "coordinates": raw_geom['rings']}
+                elif raw_geom and 'x' in raw_geom and 'y' in raw_geom:
+                    geojson_geom = {"type": "Point", "coordinates": [raw_geom['x'], raw_geom['y']]}
                 closure_data = {
                     "id": attr.get('objectid', 'N/A'),
                     "name": attr.get('constructionsite', 'N/A'),
                     "type": layer_info['type'],
+                    "geometry": geojson_geom,
                     "details": {
                         "Closure Start Date": format_time(attr.get('closurestartdate')),
                         "Closure End Date": format_time(attr.get('closureenddate')),
-                        "COMMENTS": attr.get('comments', 'N/A'), 
+                        "COMMENTS": attr.get('comments', 'N/A'),
                         "More Information": attr.get('url', 'N/A')
                     }
                 }
