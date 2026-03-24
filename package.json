@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@maplibre/maplibre-gl-directions": "^1.5.0",
+    "@maplibre/maplibre-gl-directions": "^0.9.1",
     "@tomtom-international/web-sdk-maps": "^6.25.0",
     "@tomtom-international/web-sdk-services": "^6.25.0",
     "@types/maplibre-gl": "^1.13.2",
