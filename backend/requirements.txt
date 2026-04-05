@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+torch
+transformers
+peft
+bitsandbytes>=0.46.1
+accelerate
+huggingface-hub
+python-dotenv

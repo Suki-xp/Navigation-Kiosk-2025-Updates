@@ -1,8 +1,14 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
+Install requirements to run backend AI model. 
+```bash
+ cd backend
+ pip install -r requirements.txt
+ uvicorn server:app --host 127.0.0.1 --port 8000
+  ```
 
-First, run the development server:
+Then, run the development server:
 
 ```bash
 npm run dev

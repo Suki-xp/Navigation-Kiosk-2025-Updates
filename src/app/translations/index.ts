@@ -39,6 +39,10 @@ export interface Translations {
   currentClosures: string;
   futureClosures: string;
   adaRoutes: string;
+  // AIGuidePanel
+  aiGuideTitle: string;
+  aiGuideLoading: string;
+  aiGuideUnavailable: string;
   // NearbyFooter
   nearbyLocations: string;
   noNearbyLocations: string;
@@ -88,6 +92,9 @@ export const translations: Record<Language, Translations> = {
     currentClosures: "Current Closures",
     futureClosures: "Future Closures",
     adaRoutes: "ADA Routes",
+    aiGuideTitle: "AI Campus Guide",
+    aiGuideLoading: "Generating campus directions\u2026",
+    aiGuideUnavailable: "AI guide unavailable",
     nearbyLocations: "Nearby Locations",
     noNearbyLocations: "No nearby locations found.",
     language: "Language",
@@ -133,6 +140,9 @@ export const translations: Record<Language, Translations> = {
     currentClosures: "Cierres Actuales",
     futureClosures: "Cierres Futuros",
     adaRoutes: "Rutas ADA",
+    aiGuideTitle: "Gu\u00eda IA del Campus",
+    aiGuideLoading: "Generando direcciones\u2026",
+    aiGuideUnavailable: "Gu\u00eda IA no disponible",
     nearbyLocations: "Lugares Cercanos",
     noNearbyLocations: "No se encontraron lugares cercanos.",
     language: "Idioma",
@@ -178,6 +188,9 @@ export const translations: Record<Language, Translations> = {
     currentClosures: "\u5f53\u524d\u5c01\u95ed",
     futureClosures: "\u672a\u6765\u5c01\u95ed",
     adaRoutes: "\u65e0\u969c\u788d\u8def\u7ebf",
+    aiGuideTitle: "AI \u6821\u56ed\u5bfc\u822a",
+    aiGuideLoading: "\u6b63\u5728\u751f\u6210\u6821\u56ed\u65b9\u5411\u2026",
+    aiGuideUnavailable: "AI \u5bfc\u822a\u4e0d\u53ef\u7528",
     nearbyLocations: "\u9644\u8fd1\u5730\u70b9",
     noNearbyLocations: "\u672a\u627e\u5230\u9644\u8fd1\u5730\u70b9\u3002",
     language: "\u8bed\u8a00",
@@ -223,6 +236,9 @@ export const translations: Record<Language, Translations> = {
     currentClosures: "\ud604\uc7ac \ud3d0\uc1c4",
     futureClosures: "\uc608\uc815\ub41c \ud3d0\uc1c4",
     adaRoutes: "\uc7a5\uc560\uc778 \uacbd\ub85c",
+    aiGuideTitle: "AI \uce90\ud37c\uc2a4 \uac00\uc774\ub4dc",
+    aiGuideLoading: "\uce90\ud37c\uc2a4 \uae38\uc548\ub0b4 \uc0dd\uc131 \uc911\u2026",
+    aiGuideUnavailable: "AI \uac00\uc774\ub4dc \uc0ac\uc6a9 \ubd88\uac00",
     nearbyLocations: "\uc8fc\ubcc0 \uc7a5\uc18c",
     noNearbyLocations: "\uc8fc\ubcc0 \uc7a5\uc18c\ub97c \ucc3e\uc744 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.",
     language: "\uc5b8\uc5b4",
@@ -268,6 +284,9 @@ export const translations: Record<Language, Translations> = {
     currentClosures: "\u0935\u0930\u094d\u0924\u092e\u093e\u0928 \u092c\u0902\u0926\u0940",
     futureClosures: "\u092d\u0935\u093f\u0937\u094d\u092f \u0915\u0940 \u092c\u0902\u0926\u0940",
     adaRoutes: "ADA \u092e\u093e\u0930\u094d\u0917",
+    aiGuideTitle: "AI \u0915\u0948\u0902\u092a\u0938 \u0917\u093e\u0907\u0921",
+    aiGuideLoading: "\u0915\u0948\u0902\u092a\u0938 \u0926\u093f\u0936\u093e\u090f\u0902 \u0924\u0948\u092f\u093e\u0930 \u0939\u094b \u0930\u0939\u0940 \u0939\u0948\u0902\u2026",
+    aiGuideUnavailable: "AI \u0917\u093e\u0907\u0921 \u0909\u092a\u0932\u092c\u094d\u0927 \u0928\u0939\u0940\u0902",
     nearbyLocations: "\u0906\u0938-\u092a\u093e\u0938 \u0915\u0947 \u0938\u094d\u0925\u093e\u0928",
     noNearbyLocations: "\u0915\u094b\u0908 \u0906\u0938-\u092a\u093e\u0938 \u0915\u0947 \u0938\u094d\u0925\u093e\u0928 \u0928\u0939\u0940\u0902 \u092e\u093f\u0932\u0947\u0964",
     language: "\u092d\u093e\u0937\u093e",
