@@ -84,8 +84,8 @@ const MapComponent: React.FC<MapComponentProps> = ({ closures = [] }) => {
   //These are the commnads that will outfill the input and outputs of the user for locations
 
   useEffect(() => {
-    //Campus center positiotn (Drillfield)
-    const position = { lat: 37.22610350373415, lng: -80.42224010371321 };
+    //Kiosk location (Goodwin Hall)
+    const position = { lat: 37.23244455992258, lng: -80.4256796782161 };
 
     const initMap = () => {
       if (!mapRef.current) return;
@@ -250,7 +250,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ closures = [] }) => {
 
     //We want to add specific filitering for the map that will only bring up
     //Blacksburg, Virginia Locations for users to route
-    const locationBias = `proximity:-80.42224010371321,37.22610350373415`;
+    const locationBias = `proximity:-80.4256796782161,37.23244455992258`;
     const filterBias = `rect:-80.5,37.15,-80.35,37.3`;
     //Creates a barrier arround the blacksburg locations for filtering
 
@@ -466,7 +466,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ closures = [] }) => {
     }
 
     //We do the same thing by adding the bias filtering for the blacksburg locations
-    const locationBiasAgain = `proximity:-80.42224010371321,37.22610350373415`;
+    const locationBiasAgain = `proximity:-80.4256796782161,37.23244455992258`;
     const filterBiasAgain = `rect:-80.5,37.15,-80.35,37.3`;
 
     const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&limit=5&${locationBiasAgain}&filter=${filterBiasAgain}&apiKey=${apikey}`;

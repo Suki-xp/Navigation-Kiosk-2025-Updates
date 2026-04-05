@@ -49,10 +49,10 @@ async def lifespan(app: FastAPI):
             token=os.environ.get("HF_TOKEN"),
         )
     else:
-        print("No CUDA GPU — loading model on CPU with float32...")
+        print("No CUDA GPU — loading model on CPU with bfloat16...")
         base_model = AutoModelForCausalLM.from_pretrained(
             "meta-llama/Llama-3.2-3B-Instruct",
-            torch_dtype=torch.float32,
+            torch_dtype=torch.bfloat16,
             device_map="cpu",
             token=os.environ.get("HF_TOKEN"),
         )
@@ -69,6 +69,11 @@ async def lifespan(app: FastAPI):
         "sukixp/vt-navigation-llama-3b",
         token=os.environ.get("HF_TOKEN"),
     )
+
+    # Merge LoRA weights into base model — removes adapter overhead at inference
+    print("Merging LoRA adapter into base model for faster inference...")
+    model = model.merge_and_unload()
+    model.eval()
 
     app.state.model = model
     app.state.tokenizer = tokenizer
@@ -122,17 +127,19 @@ async def get_directions(request: DirectionRequest):
             f"Output:"
         )
 
-        # Tokenize and generate — lower max_new_tokens on CPU to keep response time reasonable
-        max_tokens = 2500 if HAS_CUDA else 500
-        device = model.device if HAS_CUDA else torch.device("cpu")
+        # Tokenize and generate with no_grad for speed
+        max_tokens = 500 if HAS_CUDA else 300
+        device = next(model.parameters()).device
         inputs = tokenizer(full_prompt, return_tensors="pt").to(device)
-        output_tokens = model.generate(
-            **inputs,
-            max_new_tokens=max_tokens,
-            do_sample=True,
-            temperature=0.7,
-            pad_token_id=tokenizer.eos_token_id,
-        )
+
+        with torch.no_grad():
+            output_tokens = model.generate(
+                **inputs,
+                max_new_tokens=max_tokens,
+                do_sample=True,
+                temperature=0.7,
+                pad_token_id=tokenizer.eos_token_id,
+            )
 
         # Decode and extract the output after "Output:"
         full_response = tokenizer.decode(output_tokens[0], skip_special_tokens=True)
