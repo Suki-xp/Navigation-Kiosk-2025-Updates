@@ -10,10 +10,10 @@ import KioskDemoView04 from "./KioskDemoView04";
 export default function CarouselView() {
   const pages = [
     MapPage,
-    KioskDemoView01,
-    KioskDemoView02,
-    KioskDemoView03,
-    KioskDemoView04,
+    //KioskDemoView01,
+    //KioskDemoView02,
+    //KioskDemoView03,
+    //KioskDemoView04,
   ];
   const [index, setIndex] = useState(0);
 
