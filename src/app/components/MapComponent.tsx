@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import MapLegend from "./MapLegend";
+import AIGuidePanel from "./AIGuidePanel";
 import { useAppSettings } from "../context/AppSettingsContext";
 import { translations } from "../translations";
 
@@ -77,11 +78,14 @@ const MapComponent: React.FC<MapComponentProps> = ({ closures = [] }) => {
   const [routeLayerId] = useState("route-line"); //maps the distance between the points
   const [startSuggestions, setStartSuggestions] = useState<GeoapifyFeature[]>([]);
   const [endSuggestions, setEndSuggestions] = useState<GeoapifyFeature[]>([]);
+  const [aiDirections, setAiDirections] = useState<string | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
   //These are the commnads that will outfill the input and outputs of the user for locations
 
   useEffect(() => {
-    //Campus center positiotn (Drillfield)
-    const position = { lat: 37.22610350373415, lng: -80.42224010371321 };
+    //Kiosk location (Goodwin Hall)
+    const position = { lat: 37.23244455992258, lng: -80.4256796782161 };
 
     const initMap = () => {
       if (!mapRef.current) return;
@@ -246,7 +250,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ closures = [] }) => {
 
     //We want to add specific filitering for the map that will only bring up
     //Blacksburg, Virginia Locations for users to route
-    const locationBias = `proximity:-80.42224010371321,37.22610350373415`;
+    const locationBias = `proximity:-80.4256796782161,37.23244455992258`;
     const filterBias = `rect:-80.5,37.15,-80.35,37.3`;
     //Creates a barrier arround the blacksburg locations for filtering
 
@@ -276,6 +280,46 @@ const MapComponent: React.FC<MapComponentProps> = ({ closures = [] }) => {
     const data = await res.json();
 
     return data;
+  }
+
+  //Sends route steps to the AI backend for natural language directions
+  async function fetchAIDirections(
+    origin: string,
+    destination: string,
+    steps: Array<{ instruction: { text: string }; distance: number }>
+  ) {
+    setAiLoading(true);
+    setAiError(null);
+    setAiDirections(null);
+
+    try {
+      const backendUrl = process.env.NEXT_PUBLIC_AI_BACKEND_URL || "http://localhost:8000";
+      const response = await fetch(`${backendUrl}/api/directions`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          origin,
+          destination,
+          steps: steps.map((s) => ({
+            instruction: s.instruction.text,
+            distance: s.distance,
+          })),
+        }),
+      });
+
+      if (!response.ok) throw new Error("AI server error");
+      const data = await response.json();
+
+      if (data.success) {
+        setAiDirections(data.directions);
+      } else {
+        setAiError(data.error || "Failed to generate directions");
+      }
+    } catch {
+      setAiError("AI guide unavailable");
+    } finally {
+      setAiLoading(false);
+    }
   }
 
   //Handles the route pattern of the locations
@@ -344,8 +388,11 @@ const MapComponent: React.FC<MapComponentProps> = ({ closures = [] }) => {
       },
     });
 
-    //rerouting
-    const coords = routeFeature.geometry.coordinates;
+    //rerouting — flatten coordinates if MultiLineString
+    const rawCoords = routeFeature.geometry.coordinates;
+    const coords: number[][] = Array.isArray(rawCoords[0]?.[0])
+      ? rawCoords.flat()
+      : rawCoords;
     const bounds = new maplibregl.LngLatBounds();
 
     coords.forEach((coord: number[]) => {
@@ -397,6 +444,12 @@ const MapComponent: React.FC<MapComponentProps> = ({ closures = [] }) => {
           duration: 1000,
         })
     }
+
+    //Send route steps to AI backend for natural language directions
+    const legs = routeFeature.properties?.legs;
+    if (legs && legs[0]?.steps) {
+      fetchAIDirections(startInput, endInput, legs[0].steps);
+    }
   }
 
   async function autofillInputs(query: string): Promise<GeoapifyFeature[]>
@@ -413,7 +466,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ closures = [] }) => {
     }
 
     //We do the same thing by adding the bias filtering for the blacksburg locations
-    const locationBiasAgain = `proximity:-80.42224010371321,37.22610350373415`;
+    const locationBiasAgain = `proximity:-80.4256796782161,37.23244455992258`;
     const filterBiasAgain = `rect:-80.5,37.15,-80.35,37.3`;
 
     const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&limit=5&${locationBiasAgain}&filter=${filterBiasAgain}&apiKey=${apikey}`;
@@ -502,6 +555,16 @@ const MapComponent: React.FC<MapComponentProps> = ({ closures = [] }) => {
       </div>
 
       <div ref={mapRef} className="w-full flex-grow" />
+      <AIGuidePanel
+        directions={aiDirections}
+        isLoading={aiLoading}
+        error={aiError}
+        onDismiss={() => {
+          setAiDirections(null);
+          setAiError(null);
+          setAiLoading(false);
+        }}
+      />
       <MapLegend />
     </div>
   );

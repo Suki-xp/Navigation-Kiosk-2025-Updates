@@ -1,5 +1,7 @@
-import CarouselView from "./components/CarouselView";
+// import CarouselView from "./components/CarouselView";
+import MapPage from "./mapPage";
 
 export default function Home() {
-  return <CarouselView />;
+  // return <CarouselView />;
+  return <MapPage />;
 }
